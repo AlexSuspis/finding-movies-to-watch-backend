@@ -1,6 +1,8 @@
 const express = require('express');
 const cors = require('cors');
 
+const spawn = require("child_process").spawn;
+
 const app = express();
 const port = 8080;
 
@@ -24,8 +26,35 @@ app.get('/python', (req, res) => {
 
 })
 
+
+const pythonPromise = () => {
+    return new Promise((resolve, reject) => {
+        try {
+
+            const python = spawn("python", ["./recommendation-system/app.py", 'Superman']);
+
+            python.stdout.on("data", (data) => {
+                resolve(data.toString());
+            });
+
+            python.stderr.on("data", (data) => {
+                reject(data.toString());
+            });
+        }
+        catch (err) {
+            console.log("error!: ", err)
+        }
+    });
+};
+
+app.get("/test-python", async (req, res) => {
+    const dataFromPython = await pythonPromise();
+    res.send(dataFromPython);
+});
+
+
+
 const get_movies_from_query = (query => {
-    const spawn = require("child_process").spawn;
     const pythonProcess = spawn('python', ["recommendation-system/app.py", query]);
 
     results = [];
@@ -33,14 +62,15 @@ const get_movies_from_query = (query => {
     pythonProcess.stdout.on('data', (data) => {
         //console.log(Buffer.from(data).values())
         results.push(data);
+        // console.log(data.toString())
     });
 
     pythonProcess.stdout.on('end', () => {
         console.log("python script ended")
-        //let resultData = Buffer.from(results).values()
+        // let resultData = Buffer.from(results).values()
         //let resultData = JSON.parse(results)
         let resultData = results.toString()
-        console.log(resultData)
+        console.log("results: ", resultData)
     })
 })
 
