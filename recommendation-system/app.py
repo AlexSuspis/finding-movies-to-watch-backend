@@ -44,8 +44,8 @@ def get_movies_containing_query(query, n):
 
 
 #Given a list of movie titles, we are interested in finding the one which is the most similar to the query string
-#Input  -> dataframe with columns ["title","movieId"]
-#Output -> JSON object with format {most_similar: 123, others: [1,2,3,4,...]}
+#Input  -> dataframe with columns ["title","movieId"], and the user query string
+#Output -> the movieId (type int) of the movie with the most similar title to the query string
 def find_most_similar_movieId(query, movie_titles_and_ids):
 	#get list of movie titles from movie_titles_and_ids
 	movie_titles = movie_titles_and_ids['title'].tolist()
@@ -72,6 +72,8 @@ def find_most_similar_movieId(query, movie_titles_and_ids):
 def get_similarity(string1, string2):
 	return SequenceMatcher(None, string1, string2).ratio()
 
+
+
 #From the user query, find list of movie titles and their respective movie_ids containing it.
 movie_titles_and_ids = get_movies_containing_query(query,5) 
 #print(movie_titles_and_ids)
@@ -80,6 +82,19 @@ print()
 
 most_similar_movieId = find_most_similar_movieId(query, movie_titles_and_ids)
 
+
+#Prepare JSON 
+#Input  -> movieId of most similar movie, dataframe containing all movie_titles_and_ids which match user query
+#Output -> JSON object with format {most_similar: 123, others: [1,2,3,4,...]}
+def prepareJSONResponse(primaryId, movie_titles_and_ids):
+	response = {}	
+	print(movie_titles_and_ids)
+	#other_matches = 
+
+	#remove primaryId from movie_titles_and_ids, so we don't have duplicates in our JSON object
+	#movie_titles_and_ids
+
+prepareJSONResponse(most_similar_movieId, movie_titles_and_ids)
 
 print(most_similar_movieId)
 sys.stdout.flush()
