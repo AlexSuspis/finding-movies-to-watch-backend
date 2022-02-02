@@ -40,30 +40,38 @@ const get_movieIds_from_query = (query) => {
     });
 };
 
+const render_movie_from_id = (movieId) => {
+    //given movieId
+    //return JSON movie object
+}
+
+
 app.get("/search/:query", async (req, res) => {
     const { query } = req.params;
     console.log(`query is: ${query}`)
 
     //Get movie ids matching the query
+    await get_movieIds_from_query(query)
+        .then(res => {
+            const movieIds_matching_query = JSON.parse(res);
+            console.log(movieIds_matching_query)
 
-    const response = await get_movieIds_from_query(query);
-    const movieIds_matching_query = JSON.parse(response);
-    console.log(movieIds_matching_query);
+            //Render all movie_ids into JSON movie objects by querying database
 
+            //Send JSON movie objects to client side.
+        })
+        .catch(err => console.log("Error from get_movieIds_from_query(): ", err));
+
+
+    // const response = await get_movieIds_from_query(query);
+    // console.log(movieIds_matching_query);
+});
+
+app.get('/recommendations/:movieId', (req, res) => {
     //Get movie ids for recommended movies
     // const recommended_movieIds = await get_recommended_movies(movieIds_matching_query.primaryId)
 
-    //Render all movie_ids into JSON movie objects by querying database
-
-    //Send JSON movie objects to client side.
-
-    //Option 1) Choose the movie which matches the query the most?
-
-
-
-});
-
-app.get('/recommendations', (req, res) => { })
+})
 
 
 app.get('*', (req, res) => res.status(404).send("Page not found!"))
