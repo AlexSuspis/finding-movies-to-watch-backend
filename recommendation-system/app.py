@@ -14,10 +14,10 @@ query = sys.argv[1]
 def get_movies_containing_query(query, n):
 
 	#if using from the command line
-	movies_df = pd.read_csv('./input/small_dataset/movies.csv')
+	# movies_df = pd.read_csv('./input/small_dataset/movies.csv')
 
 	#else if called from express server, the path to dataset must be relative to index.js file, not this script! Easy mistake to make
-	#movies_df = pd.read_csv('./recommendation-system/input/small_dataset/movies.csv')
+	movies_df = pd.read_csv('./recommendation-system/input/small_dataset/movies.csv')
 	
 	#Load dataset in dataframe with columns "title" and movieId
 	movies_df = movies_df[['title', 'movieId']]
