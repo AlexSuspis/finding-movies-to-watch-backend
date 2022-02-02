@@ -24,7 +24,7 @@ const get_movieIds_from_query = (query) => {
     return new Promise((resolve, reject) => {
         try {
 
-            const python = spawn("python", ["./recommendation-system/app.py", query]);
+            const python = spawn("python", ["./recommendation-system/get-movieIds-from-query.py", query]);
 
             python.stdout.on("data", (data) => {
                 resolve(data.toString());
@@ -51,7 +51,7 @@ app.get("/search/:query", async (req, res) => {
     console.log(movieIds_matching_query);
 
     //Get movie ids for recommended movies
-    const recommended_movieIds = await get_recommended_movies(movieIds_matching_query.primaryId)
+    // const recommended_movieIds = await get_recommended_movies(movieIds_matching_query.primaryId)
 
     //Render all movie_ids into JSON movie objects by querying database
 
