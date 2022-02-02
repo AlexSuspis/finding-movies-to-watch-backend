@@ -2,6 +2,7 @@ import sys, json
 import pandas as pd
 import numpy as np
 from difflib import SequenceMatcher
+import json
 
 
 query = sys.argv[1]
@@ -67,6 +68,9 @@ def find_most_similar_movieId(query, movie_titles_and_ids):
 	most_similar_movieId = most_similar_movie_row['movieId'].values[0]
 	#print(most_similar_movieId)
 
+	#drop similarity columm
+	movie_titles_and_ids.drop(columns=['similarity_to_query'], inplace=True)
+
 	return most_similar_movieId
 
 def get_similarity(string1, string2):
@@ -81,6 +85,7 @@ movie_titles_and_ids = get_movies_containing_query(query,5)
 print()
 
 most_similar_movieId = find_most_similar_movieId(query, movie_titles_and_ids)
+#print(most_similar_movieId)
 
 
 #Prepare JSON 
@@ -88,15 +93,33 @@ most_similar_movieId = find_most_similar_movieId(query, movie_titles_and_ids)
 #Output -> JSON object with format {most_similar: 123, others: [1,2,3,4,...]}
 def prepareJSONResponse(primaryId, movie_titles_and_ids):
 	response = {}	
-	print(movie_titles_and_ids)
-	#other_matches = 
 
 	#remove primaryId from movie_titles_and_ids, so we don't have duplicates in our JSON object
-	#movie_titles_and_ids
+	movie_titles_and_ids = movie_titles_and_ids[movie_titles_and_ids['movieId'] != primaryId]
 
-prepareJSONResponse(most_similar_movieId, movie_titles_and_ids)
+	others = movie_titles_and_ids['movieId'].values.tolist()
 
-print(most_similar_movieId)
+	# print(others)
+	# print(type(others))
+	# print()
+
+	data = {"primaryId": int(primaryId), "others": others}
+	# print(data)
+	# print()	
+
+	jsonResponse = json.dumps(data)
+	# print(json.dumps(data))
+	# print(jsonResponse)
+
+	return jsonResponse
+
+
+
+response = prepareJSONResponse(most_similar_movieId, movie_titles_and_ids)
+
+print(response)
+print(type(response))
+
 sys.stdout.flush()
 
 
