@@ -82,7 +82,7 @@ def get_similarity(string1, string2):
 movie_titles_and_ids = get_movies_containing_query(query,5) 
 #print(movie_titles_and_ids)
 
-print()
+# print()
 
 most_similar_movieId = find_most_similar_movieId(query, movie_titles_and_ids)
 #print(most_similar_movieId)
@@ -118,7 +118,7 @@ def prepareJSONResponse(primaryId, movie_titles_and_ids):
 response = prepareJSONResponse(most_similar_movieId, movie_titles_and_ids)
 
 print(response)
-print(type(response))
+# print(type(response))
 
 sys.stdout.flush()
 

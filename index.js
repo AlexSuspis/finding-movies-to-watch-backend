@@ -45,15 +45,17 @@ app.get("/search/:query", async (req, res) => {
     console.log(`query is: ${query}`)
 
     //Get movie ids matching the query
-    const movie_ids_matching_query = await get_movieIds_from_query(query);
-    console.log(movie_ids_matching_query);
+
+    const response = await get_movieIds_from_query(query);
+    const movieIds_matching_query = JSON.parse(response);
+    console.log(movieIds_matching_query);
 
     //Get movie ids for recommended movies
+    const recommended_movieIds = await get_recommended_movies(movieIds_matching_query.primaryId)
 
     //Render all movie_ids into JSON movie objects by querying database
 
     //Send JSON movie objects to client side.
-
 
     //Option 1) Choose the movie which matches the query the most?
 
