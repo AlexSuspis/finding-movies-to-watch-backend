@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors');
+const Movie = require('./models/movie')
 
 const spawn = require("child_process").spawn;
 
@@ -40,13 +41,16 @@ const get_movieIds_from_query = (query) => {
     });
 };
 
-const render_movie_from_id = (movieId) => {
+const render_movie_from_id = async (movieId) => {
     //given movieId
+    console.log("movie received!: ", movieId)
     //return JSON movie object
+    const movie = await Movie.findById(movieId)
+
 }
 
 
-app.get("/search/:query", async (req, res) => {
+app.get("/matches/:query", async (req, res) => {
     const { query } = req.params;
     console.log(`query is: ${query}`)
 
@@ -56,9 +60,25 @@ app.get("/search/:query", async (req, res) => {
             const movieIds_matching_query = JSON.parse(res);
             console.log(movieIds_matching_query)
 
-            //Render all movie_ids into JSON movie objects by querying database
+            //if no movies match the user query:
+            if (Object.keys(movieIds_matching_query).length == 0) {
+                console.log("no matches for query!")
+            } else {
+                //Render all movie_ids into JSON movie objects by querying database
+                all_movieIds = [];
+                all_movieIds.push(movieIds_matching_query.primaryId)
+                all_movieIds.push(...movieIds_matching_query.others)
 
-            //Send JSON movie objects to client side.
+                movies = [];
+                all_movieIds.forEach(movieId => {
+                    let movie = render_movie_from_id(movieId)
+                    movies.push(movie)
+                })
+
+                //Send JSON movie objects to client side.
+
+            }
+
         })
         .catch(err => console.log("Error from get_movieIds_from_query(): ", err));
 
