@@ -15,6 +15,7 @@ print(db)
 dataset = pd.read_csv('./input/small_dataset/movies.csv')
 
 print(dataset.columns)
+print(dataset)
 
 countries = [
 	'Portugal',
@@ -47,7 +48,8 @@ def get_random_countries():
 		if(random_country not in selected_countries):
 			selected_countries.append(random_country)
 
-	print(selected_countries)
+	# print(selected_countries)
+	return selected_countries
 
 def get_random_providers():
 	global providers
@@ -63,13 +65,36 @@ def get_random_providers():
 		if(random_provider not in selected_providers):
 			selected_providers.append(random_provider)
 
-	print(selected_providers)
+	# print(selected_providers)
+	return selected_providers
 
 get_random_countries()
 get_random_providers()
 
-#Preprocess dataset before inserting it into mongo database.
+
+#1) Preprocess dataset before inserting it into mongo database.
 
 #For each movie entry, add a random number of randomly selected countriesFor each movie entry, add a random number of randomly selected countries
+random_countries_list = []
+#create a set of random countries for each row in dataset
+for i in range(dataset.index.size):
+	random_countries_list.append(get_random_countries())
+
+dataset['countries'] = random_countries_list
 
 #For each movie entry, add a random number of randomly selected countriesFor each movie entry, add a random number of randomly selected countries
+#create a set of random countries for each row in dataset
+random_providers_list = []
+for i in range(dataset.index.size):
+	random_providers_list.append(get_random_providers())
+
+
+dataset['providers'] = random_countries_list
+
+print(dataset.head())
+
+
+#2) Insert dataset into mongo database. How am I going to do this?
+
+
+
