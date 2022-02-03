@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const Movie = require('./models/movie')
+const mongoose = require('mongoose')
 
 const spawn = require("child_process").spawn;
 
@@ -9,6 +10,17 @@ const port = 8080;
 
 //middleware
 app.use(cors())
+
+//connect to mongo
+// const atlasDBUrl = process.env.DB_URL;
+const dbUrl = "mongodb+srv://root_user:root123@cluster0.i7dzt.mongodb.net/finding-movies-to-watch?retryWrites=true&w=majority";
+mongoose.connect(dbUrl,
+    {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+    })
+    .then(() => console.log('Connected to database!'))
+    .catch(err => console.log(err));
 
 
 app.get('/', (req, res) => {

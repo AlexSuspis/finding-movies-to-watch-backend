@@ -3,7 +3,7 @@ import pandas as pd
 import random
 
 #Replace <password> with the password for the root_user user. Replace myFirstDatabase with the name of the database that connections will use by default.
-uri = "mongodb+srv://root_user:root_user@cluster0.i7dzt.mongodb.net/finding-movies-to-watch?retryWrites=true&w=majority"
+uri = "mongodb+srv://root_user:root123@cluster0.i7dzt.mongodb.net/finding-movies-to-watch?retryWrites=true&w=majority"
 
 client = pymongo.MongoClient(uri)
 
