@@ -59,7 +59,8 @@ const render_movie_from_id = async (movieId) => {
     //given movieId
     console.log("movie received!: ", movieId)
     //return JSON movie object
-    const movie = await Movie.findById(movieId)
+    const movie = await Movie.find({ movieId })
+    console.log(movie)
 
 }
 
@@ -88,6 +89,9 @@ app.get("/matches/:query", async (req, res) => {
                     let movie = render_movie_from_id(movieId)
                     movies.push(movie)
                 })
+                // let movie = render_movie_from_id(all_movieIds[0])
+                // console.log(movie)
+
 
                 //Send JSON movie objects to client side.
 
