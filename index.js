@@ -34,6 +34,8 @@ app.get('/', (req, res) => {
 //Login, register, logout
 
 const get_movieIds_from_query = (query) => {
+    //promise code inspired by:
+    //https://www.geeksforgeeks.org/how-to-communicate-json-data-between-python-and-node-js/
     return new Promise((resolve, reject) => {
         try {
 
