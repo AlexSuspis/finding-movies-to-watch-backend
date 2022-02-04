@@ -58,9 +58,11 @@ const get_movieIds_from_query = (query) => {
 const render_movie_from_id = async (movieId) => {
     //given movieId
     console.log("movie received!: ", movieId)
+
     //return JSON movie object
-    const movie = await Movie.find({ movieId })
-    console.log(movie)
+    const movie = await Movie.findOne({ movieId })
+    // console.log(JSON.stringify(movie))
+    return JSON.stringify(movie)
 
 }
 
@@ -69,40 +71,34 @@ app.get("/matches/:query", async (req, res) => {
     const { query } = req.params;
     console.log(`query is: ${query}`)
 
-    //Get movie ids matching the query
-    await get_movieIds_from_query(query)
-        .then(res => {
-            const movieIds_matching_query = JSON.parse(res);
-            console.log(movieIds_matching_query)
+    try {
+        data = await get_movieIds_from_query(query)
+        movieIds_matching_query = JSON.parse(data)
+        // console.log(movieIds_matching_query)
 
-            //if no movies match the user query:
-            if (Object.keys(movieIds_matching_query).length == 0) {
-                console.log("no matches for query!")
-            } else {
-                //Render all movie_ids into JSON movie objects by querying database
-                all_movieIds = [];
-                all_movieIds.push(movieIds_matching_query.primaryId)
-                all_movieIds.push(...movieIds_matching_query.others)
+        if (Object.keys(movieIds_matching_query).length == 0) {
+            console.log("no matches for query!")
+            res.status(404)
+            res.send({})
+        }
 
-                movies = [];
-                all_movieIds.forEach(movieId => {
-                    let movie = render_movie_from_id(movieId)
-                    movies.push(movie)
-                })
-                // let movie = render_movie_from_id(all_movieIds[0])
-                // console.log(movie)
+        //Render all movie_ids into JSON movie objects by querying database
+        all_movieIds = [];
+        all_movieIds.push(movieIds_matching_query.primaryId)
+        all_movieIds.push(...movieIds_matching_query.others)
 
+        movies = [];
+        for (movieId of all_movieIds) {
+            let movie = await render_movie_from_id(movieId)
+            movies.push(movie)
+        }
+        console.log(movies)
 
-                //Send JSON movie objects to client side.
+        res.send(movies)
 
-            }
+        //Send JSON movie objects to client side.
+    } catch (err) { console.log('error!: ', err) };
 
-        })
-        .catch(err => console.log("Error from get_movieIds_from_query(): ", err));
-
-
-    // const response = await get_movieIds_from_query(query);
-    // console.log(movieIds_matching_query);
 });
 
 app.get('/recommendations/:movieId', (req, res) => {
