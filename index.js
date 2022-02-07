@@ -62,7 +62,8 @@ const render_movie_from_id = async (movieId) => {
     //return JSON movie object
     const movie = await Movie.findOne({ movieId })
     // console.log(JSON.stringify(movie))
-    return JSON.stringify(movie)
+    // return JSON.stringify(movie)
+    return movie
 
 }
 
@@ -72,9 +73,9 @@ app.get("/matches/:query", async (req, res) => {
     console.log(`query is: ${query}`)
 
     try {
-        data = await get_movieIds_from_query(query)
-        movieIds_matching_query = JSON.parse(data)
-        // console.log(movieIds_matching_query)
+        var data = await get_movieIds_from_query(query)
+        var movieIds_matching_query = JSON.parse(data)
+        console.log(movieIds_matching_query)
 
         if (Object.keys(movieIds_matching_query).length == 0) {
             console.log("no matches for query!")
@@ -83,18 +84,20 @@ app.get("/matches/:query", async (req, res) => {
         }
 
         //Render all movie_ids into JSON movie objects by querying database
-        all_movieIds = [];
+        var all_movieIds = [];
         all_movieIds.push(movieIds_matching_query.primaryId)
         all_movieIds.push(...movieIds_matching_query.others)
+        // console.log(all_movieIds)
 
-        movies = [];
+        var movies = [];
         for (movieId of all_movieIds) {
             let movie = await render_movie_from_id(movieId)
+            console.log(movie)
             movies.push(movie)
         }
         console.log(movies)
 
-        res.send(movies)
+        res.send(JSON.stringify(movies))
 
         //Send JSON movie objects to client side.
     } catch (err) { console.log('error!: ', err) };
