@@ -9,15 +9,14 @@ query = sys.argv[1]
 
 #Input: search query, number of movies to return
 #Output: array of movieIds
-#Takes in a query string, looks up the dataset and returns the first
-	# n movieIds which have this query as a substring in their title.
-def get_movies_containing_query(query, n):
+#Takes in a query string, looks up the dataset and returns all the records whose movie titles are a superset of the query
+def get_movies_containing_query(query ):
 
 	#if using from the command line
-	# movies_df = pd.read_csv('./input/small_dataset/movies.csv')
+	movies_df = pd.read_csv('./input/small_dataset/movies.csv')
 
 	#else if called from express server, the path to dataset must be relative to index.js file, not this script! Easy mistake to make
-	movies_df = pd.read_csv('./recommendation-system/input/small_dataset/movies.csv')
+	# movies_df = pd.read_csv('./recommendation-system/input/small_dataset/movies.csv')
 	
 	#Load dataset in dataframe with columns "title" and movieId
 	movies_df = movies_df[['title', 'movieId']]
@@ -39,16 +38,13 @@ def get_movies_containing_query(query, n):
 
 
 
-
 #Given a list of movie titles, we are interested in finding the one which is the most similar to the query string
 #Input  -> dataframe with columns ["title","movieId"], and the user query string
 #Output -> the movieId (type int) of the movie with the most similar title to the query string
-def find_most_similar_movieId(query, movie_titles_and_ids):
-	#get list of movie titles from movie_titles_and_ids
-	movie_titles = movie_titles_and_ids['title'].tolist()
-
+def find_most_similar_movieIds(query, movie_titles_and_ids, n):
 	#apply similarity function
 	movie_titles_and_ids['similarity_to_query'] = movie_titles_and_ids['title'].apply(lambda x: get_similarity(x, query))	
+	# print(movie_titles_and_ids)
 
 	#get movie_id corresponding to max similarity value
 	max_similarity = movie_titles_and_ids['similarity_to_query'].max()
@@ -56,46 +52,51 @@ def find_most_similar_movieId(query, movie_titles_and_ids):
 	#use panda's idxmax function to get the row corresponding to the max value in a given column.
 	max_similarity_idx = movie_titles_and_ids['similarity_to_query'].idxmax()
 	most_similar_movie_row = movie_titles_and_ids.loc[[max_similarity_idx]]
+	# print(most_similar_movie_row)
 
-	most_similar_movieId = most_similar_movie_row['movieId'].values[0]
-
-	#drop similarity columm
-	movie_titles_and_ids.drop(columns=['similarity_to_query'], inplace=True)
-
-	return most_similar_movieId
-
-def get_similarity(string1, string2):
-	return SequenceMatcher(None, string1, string2).ratio()
-
-#Prepare JSON 
-#Input  -> movieId of most similar movie, dataframe containing all movie_titles_and_ids which match user query
-#Output -> JSON object with format {most_similar: 123, others: [1,2,3,4,...]}
-def prepareJSONResponse(primaryId, movie_titles_and_ids):
-	response = {}	
+	primaryId = most_similar_movie_row['movieId'].values[0]
 
 	#remove primaryId from movie_titles_and_ids, so we don't have duplicates in our JSON object
 	movie_titles_and_ids = movie_titles_and_ids[movie_titles_and_ids['movieId'] != primaryId]
 
-	#movies which also match the query, but are not as similar as primaryId	
-	others = movie_titles_and_ids['movieId'].values.tolist()
+	ordered_similarities = movie_titles_and_ids.sort_values(by=['similarity_to_query'], ascending=False)
+	others = ordered_similarities['movieId'].values[:n-1]
 
-	data = {"primaryId": int(primaryId), "others": others}
+	#convert from ndarray to list
+	others = others.tolist()
 
-	jsonResponse = json.dumps(data)
+	#drop similarity columm
+	movie_titles_and_ids.drop(columns=['similarity_to_query'], inplace=True)
 
-	return jsonResponse
+	return primaryId, others
+
+def get_similarity(string1, string2):
+	return SequenceMatcher(None, string1, string2).ratio()
+
+
+#Prepare JSON 
+#Input  -> movieId of most similar movie, dataframe containing all movie_titles_and_ids which match user query
+#Output -> JSON object with format {most_similar: 123, others: [1,2,3,4,...]}
+def prepareJSONResponse(n):
+	response = {}	
+
+	movie_titles_and_ids = get_movies_containing_query(query) 
+
+	if (movie_titles_and_ids.size == 0):
+		response = json.dumps({})
+		print(response)	
+	else:
+		primaryId, others = find_most_similar_movieIds(query, movie_titles_and_ids, n=10)
+
+		data = {"primaryId": int(primaryId), "others": others}
+
+		response = json.dumps(data)
+
+		print(response)
 
 
 
-#From the user query, find list of movie titles and their respective movie_ids containing it.
-movie_titles_and_ids = get_movies_containing_query(query,5) 
-if (movie_titles_and_ids.size == 0):
-	response = json.dumps({})
-	print(response)	
-else:
-	most_similar_movieId = find_most_similar_movieId(query, movie_titles_and_ids)
-	response = prepareJSONResponse(most_similar_movieId, movie_titles_and_ids)
-	print(response)
+prepareJSONResponse(n=10)
 
 sys.stdout.flush()
 	
