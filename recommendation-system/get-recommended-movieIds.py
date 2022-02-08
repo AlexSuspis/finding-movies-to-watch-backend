@@ -7,36 +7,61 @@ movieId = int(sys.argv[1])
 #Script input: movieId : int 
 #Script output: list of n integers, each one being a recommended movieId (similar to the input movieId)  
 
-
-#if using from the command line
-# ratings_df = pd.read_csv('./input/small_dataset/ratings.csv')
-
-#else if called from express server, the path to dataset must be relative to index.js file, not this script! Easy mistake to make
-# ratings_df = pd.read_csv('./recommendation-system/input/small_dataset/ratings.csv')
-
-#Does movieId exist in dataset?
-#print [] if does not exist
-#return
+#Check if movieId exists in dataset
+	#print [] if does not exist
+	#else continue
 if(movieId == -1):
 	print([])
 else:
-	print([int(movieId)] * 10)
+	# print([int(movieId)] * 10)
+
+	#Load recommendation model
+	import pickle
+	filename = 'knn_model.sav'
+	knn_model = pickle.load(open(filename, 'rb'))
+	# print(knn_model)
+
+	final_df = pd.read_csv('./final_df.csv')
+	final_df.set_index('movieId', inplace=True)
+	# print(final_df)
+	movie_row = final_df.loc[movieId]
+	# print(movie_row)
+
+	distances, indices = knn_model.kneighbors(movie_row.values.reshape(1,-1))
+	# print()
+	# print('distances: ', distances) 
+	# print('indices: ', indices)
+
+	#get movieIds from indices
+	movieIds = []
+	for idx in indices[0]:
+		# print(final_df.iloc[idx])
+		movieIds.append(final_df.index[idx])
+
+	#remove initial movieId from movieIds list
+	movieIds.remove(movieId)
+
+	# print()
+	# print(movieIds)
+	# print(type(movieIds))
 
 
-#continue if exists
+	response = json.dumps(str(movieIds))
+	print(response)
+
+	#Predict recommended films
+		#Get 10 most similar films 
+		#Create an array
+		#JSON.dump(array)
+		#print(array)
+
+
+		
 
 
 
-# print(ratings_df)
-# ratings_df.drop(columns=['timestamp'], inplace=True)
-# print(ratings_df)
 
 
 
-
-#We are interested in creating a knn model so we can classify movieIds and get the n nearest neighbours
-#We must first pre-process the data:
-	#outliers in data
-	#null/missing values
 
 
