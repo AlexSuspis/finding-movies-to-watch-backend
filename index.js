@@ -42,7 +42,9 @@ const get_movieIds_from_query = (query) => {
             const python = spawn("python", ["./recommendation-system/get-movieIds-from-query.py", query]);
 
             python.stdout.on("data", (data) => {
-                resolve(data.toString());
+                movieIds = JSON.parse(data.toString())
+                resolve(movieIds)
+                // resolve(data.toString());
             });
 
             python.stderr.on("data", (data) => {
@@ -59,12 +61,9 @@ const render_movie_from_id = async (movieId) => {
     //given movieId
     console.log("movie received!: ", movieId)
 
-    //return JSON movie object
     const movie = await Movie.findOne({ movieId })
-    // console.log(JSON.stringify(movie))
-    // return JSON.stringify(movie)
+    console.log(movie)
     return movie
-
 }
 
 
@@ -73,8 +72,7 @@ app.get("/matches/:query", async (req, res) => {
     console.log(`query is: ${query}`)
 
     try {
-        var data = await get_movieIds_from_query(query)
-        var movieIds_matching_query = JSON.parse(data)
+        var movieIds_matching_query = await get_movieIds_from_query(query)
         console.log(movieIds_matching_query)
 
         if (Object.keys(movieIds_matching_query).length == 0) {
@@ -99,15 +97,43 @@ app.get("/matches/:query", async (req, res) => {
 
         res.send(JSON.stringify(movies))
 
-        //Send JSON movie objects to client side.
     } catch (err) { console.log('error!: ', err) };
 
 });
+const get_recommended_movieIds = (movieId) => {
+    //promise code inspired by:
+    //https://www.geeksforgeeks.org/how-to-communicate-json-data-between-python-and-node-js/
+    return new Promise((resolve, reject) => {
+        try {
+            const python = spawn("python", ["./recommendation-system/get-recommended-movieIds.py", movieId]);
 
-app.get('/recommendations/:movieId', (req, res) => {
-    //Get movie ids for recommended movies
-    // const recommended_movieIds = await get_recommended_movies(movieIds_matching_query.primaryId)
+            python.stdout.on("data", (data) => {
+                recommended_movieIds = JSON.parse(data.toString())
+                resolve(recommended_movieIds);
+            });
 
+            python.stderr.on("data", (data) => {
+                reject(data.toString());
+            });
+        }
+        catch (err) {
+            console.log("error!: ", err)
+        }
+    });
+};
+//Input: movieId
+//Output: 10 movieIds most similar to input movieId 
+app.get('/recommendations/:movieId', async (req, res) => {
+    const { movieId } = req.params
+    console.log(movieId)
+
+    try {
+        const recommended_movieIds = [];
+        recommended_movieIds = await get_recommended_movieIds(movieId)
+        console.log(recommended_movieIds)
+
+
+    } catch (err) { console.log('error in GET /recommendations/:movieId endpoint: ', err) }
 })
 
 
@@ -119,4 +145,8 @@ app.listen(port, () => {
 })
 
 
-module.exports = app
+module.exports = {
+    app,
+    get_recommended_movieIds,
+    get_movieIds_from_query
+}
