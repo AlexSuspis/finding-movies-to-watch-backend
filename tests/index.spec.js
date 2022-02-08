@@ -25,8 +25,7 @@ describe('get_recommended_movies(movieId) function', () => {
         //movieId for Superman (1978)
         const movieId = 2640;
         const movieIds = await get_recommended_movieIds(movieId)
-        expect(movieIds).toBeInstanceOf(Array)
-        // const movieIds = data.
+        expect(movieIds).toBeInstanceOf(Array).toHaveLength(10)
     })
 })
 
