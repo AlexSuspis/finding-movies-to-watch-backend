@@ -18,14 +18,18 @@ describe('get_recommended_movies(movieId) function', () => {
     it('if promise is resolved successfully, should always return an array', () => {
 
     })
-    it('should return an array of length 0 if movieId does not exist in dataset', () => {
-
+    it('should return an array of length 0 if movieId does not exist in dataset', async () => {
+        const movieId = -1;
+        const movieIds = await get_recommended_movieIds(movieId)
+        expect(movieIds).toBeInstanceOf(Array)
+        expect(movieIds).toHaveLength(0)
     })
     it('should return an array of length 10', async () => {
         //movieId for Superman (1978)
         const movieId = 2640;
         const movieIds = await get_recommended_movieIds(movieId)
-        expect(movieIds).toBeInstanceOf(Array).toHaveLength(10)
+        expect(movieIds).toBeInstanceOf(Array)
+        expect(movieIds).toHaveLength(10)
     })
 })
 
