@@ -3,6 +3,8 @@ import pandas as pd
 import numpy as np
 from difflib import SequenceMatcher
 import json
+from pathlib import Path
+import os
 
 
 query = sys.argv[1]
@@ -13,10 +15,12 @@ query = sys.argv[1]
 def get_movies_containing_query(query ):
 
 	#if using from the command line
-	# movies_df = pd.read_csv('./input/small_dataset/movies.csv')
+	# path = os.path.join(os.getcwd(), 'input/small_dataset/movies.csv')
 
 	#else if called from express server, the path to dataset must be relative to index.js file, not this script! Easy mistake to make
-	movies_df = pd.read_csv('./recommendation-system/input/small_dataset/movies.csv')
+	path = os.path.join(os.getcwd(), 'recommendation-system/input/small_dataset/movies.csv')
+
+	movies_df = pd.read_csv(path)
 	
 	#Load dataset in dataframe with columns "title" and movieId
 	movies_df = movies_df[['title', 'movieId']]
@@ -93,7 +97,6 @@ def prepareJSONResponse(n):
 		response = json.dumps(data)
 
 		print(response)
-
 
 
 prepareJSONResponse(n=10)

@@ -17,11 +17,11 @@ else:
 
 	#Load recommendation model
 	import pickle
-	filename = 'knn_model.sav'
+	filename = 'recommendation-system/knn_model.sav'
 	knn_model = pickle.load(open(filename, 'rb'))
 	# print(knn_model)
 
-	final_df = pd.read_csv('./final_df.csv')
+	final_df = pd.read_csv('recommendation-system/final_df.csv')
 	final_df.set_index('movieId', inplace=True)
 	# print(final_df)
 	movie_row = final_df.loc[movieId]
@@ -36,7 +36,7 @@ else:
 	movieIds = []
 	for idx in indices[0]:
 		# print(final_df.iloc[idx])
-		movieIds.append(final_df.index[idx])
+		movieIds.append(int(final_df.index[idx]))
 
 	#remove initial movieId from movieIds list
 	movieIds.remove(movieId)
@@ -46,7 +46,7 @@ else:
 	# print(type(movieIds))
 
 
-	response = json.dumps(str(movieIds))
+	response = json.dumps((movieIds))
 	print(response)
 
 	#Predict recommended films
@@ -56,7 +56,7 @@ else:
 		#print(array)
 
 
-		
+
 
 
 

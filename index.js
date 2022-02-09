@@ -88,7 +88,7 @@ app.get("/matches/:query", async (req, res) => {
         // console.log(all_movieIds)
 
         var movies = [];
-        for (movieId of all_movieIds) {
+        for (let movieId of all_movieIds) {
             let movie = await render_movie_from_id(movieId)
             console.log(movie)
             movies.push(movie)
@@ -108,7 +108,7 @@ const get_recommended_movieIds = (movieId) => {
             const python = spawn("python", ["./recommendation-system/get-recommended-movieIds.py", movieId]);
 
             python.stdout.on("data", (data) => {
-                recommended_movieIds = JSON.parse(data.toString())
+                var recommended_movieIds = JSON.parse(data.toString())
                 resolve(recommended_movieIds);
             });
 
@@ -128,9 +128,19 @@ app.get('/recommendations/:movieId', async (req, res) => {
     console.log(movieId)
 
     try {
-        const recommended_movieIds = [];
+        var recommended_movieIds = [];
         recommended_movieIds = await get_recommended_movieIds(movieId)
         console.log(recommended_movieIds)
+
+        var movies = [];
+        for (let movieId of recommended_movieIds) {
+            let movie = await render_movie_from_id(movieId)
+            console.log(movie)
+            movies.push(movie)
+        }
+        console.log(movies)
+
+        res.send(JSON.stringify(movies))
 
 
     } catch (err) { console.log('error in GET /recommendations/:movieId endpoint: ', err) }
