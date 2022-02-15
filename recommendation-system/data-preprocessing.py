@@ -9,7 +9,7 @@ import json
 dataset = pd.read_csv('./input/small_dataset/movies.csv')
 
 # print(dataset.columns)
-# print(dataset)
+print(dataset)
 
 countries = [
 	'Portugal',
@@ -91,12 +91,18 @@ dataset['providers'] = random_providers_list
 
 
 
+
+
 #2) Insert dataset into mongo database. How am I going to do this?
 uri = "mongodb+srv://root_user:root123@cluster0.i7dzt.mongodb.net/finding-movies-to-watch?retryWrites=true&w=majority"
 
 client = pymongo.MongoClient(uri)
 
 db = client['finding-movies-to-watch']
+
+#make movies column an index
+db.movies.create_index('movieId')
+print(db.movies.index_information())
 
 # db.movies.delete_many({})
 # print('all movie records in movie collection deleted')
