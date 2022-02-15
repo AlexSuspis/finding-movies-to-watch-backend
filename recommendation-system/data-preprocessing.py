@@ -102,7 +102,7 @@ db = client['finding-movies-to-watch']
 
 #make movies column an index
 db.movies.create_index('movieId')
-print(db.movies.index_information())
+# print(db.movies.index_information())
 
 # db.movies.delete_many({})
 # print('all movie records in movie collection deleted')

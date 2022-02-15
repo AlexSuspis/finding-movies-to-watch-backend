@@ -78,7 +78,7 @@ app.get("/matches/:query", async (req, res) => {
         if (Object.keys(movieIds_matching_query).length == 0) {
             console.log("no matches for query!")
             res.status(404)
-            res.send({})
+            res.send({ "errorMessage": "No matches found for query!" })
         }
 
         //Render all movie_ids into JSON movie objects by querying database
@@ -97,7 +97,11 @@ app.get("/matches/:query", async (req, res) => {
 
         res.send(JSON.stringify(movies))
 
-    } catch (err) { console.log('error!: ', err) };
+    } catch (err) {
+        console.log('error!: ', err)
+        res.status(404)
+        res.send({ "errorMessage": "Something went wrong!" })
+    };
 
 });
 const get_recommended_movieIds = (movieId) => {
@@ -142,8 +146,12 @@ app.get('/recommendations/:movieId', async (req, res) => {
 
         res.send(JSON.stringify(movies))
 
+    } catch (err) {
+        console.log('error in GET /recommendations/:movieId endpoint: ', err)
 
-    } catch (err) { console.log('error in GET /recommendations/:movieId endpoint: ', err) }
+        res.status(404)
+        res.send({ "errorMessage": "Something went wrong!" })
+    }
 })
 
 
