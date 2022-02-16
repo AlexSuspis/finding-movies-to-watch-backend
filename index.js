@@ -79,6 +79,7 @@ app.get("/matches/:query", async (req, res) => {
             console.log("no matches for query!")
             res.status(404)
             res.send({ "errorMessage": "No matches found for query!" })
+            return
         }
 
         //Render all movie_ids into JSON movie objects by querying database

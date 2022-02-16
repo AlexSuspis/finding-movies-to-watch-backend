@@ -5,22 +5,26 @@ from difflib import SequenceMatcher
 import json
 from pathlib import Path
 import os
+import pymongo
+import loader
 
 
 query = sys.argv[1]
 
+uri = "mongodb+srv://root_user:root123@cluster0.i7dzt.mongodb.net/finding-movies-to-watch?retryWrites=true&w=majority"
+client = pymongo.MongoClient(uri)
+db = client['finding-movies-to-watch']
+
+
+
 #Input: search query, number of movies to return
 #Output: array of movieIds
 #Takes in a query string, looks up the dataset and returns all the records whose movie titles are a superset of the query
-def get_movies_containing_query(query ):
+def get_movies_containing_query(query):
 
-	#if using from the command line
-	# path = os.path.join(os.getcwd(), 'input/small_dataset/movies.csv')
+	# movies_df = get_movies_from_db()
 
-	#else if called from express server, the path to dataset must be relative to index.js file, not this script! Easy mistake to make
-	path = os.path.join(os.getcwd(), 'recommendation-system/input/small_dataset/movies.csv')
-
-	movies_df = pd.read_csv(path)
+	movies_df = loader.load_movies_locally()
 	
 	#Load dataset in dataframe with columns "title" and movieId
 	movies_df = movies_df[['title', 'movieId']]

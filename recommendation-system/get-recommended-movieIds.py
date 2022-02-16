@@ -1,6 +1,7 @@
 import sys
 import pandas as pd
 import json
+import loader
 
 
 movieId = int(sys.argv[1])
@@ -18,13 +19,10 @@ else:
 	#Load recommendation model
 	import pickle
 
-	# filename = 'knn_model.sav'
-	filename = 'recommendation-system/knn_model.sav'
-	knn_model = pickle.load(open(filename, 'rb'))
-	# print(knn_model)
+	knn_model = loader.load_knn_model_locally() 
 
-	# final_df = pd.read_csv('final_df.csv')
-	final_df = pd.read_csv('recommendation-system/final_df.csv')
+	final_df = pd.read_csv('final_df.csv')
+	# final_df = pd.read_csv('recommendation-system/final_df.csv')
 	final_df.set_index('movieId', inplace=True)
 	# print(final_df)
 	# print(final_df)

@@ -1,19 +1,19 @@
 import pandas as pd
+import pymongo
+import loader
 
 
-#LOAD DATASET
-#if using from the command line
-ratings_df = pd.read_csv('./input/small_dataset/ratings.csv')
+uri = "mongodb+srv://root_user:root123@cluster0.i7dzt.mongodb.net/finding-movies-to-watch?retryWrites=true&w=majority"
+client = pymongo.MongoClient(uri)
+db = client['finding-movies-to-watch']
 
-#else if called from express server, the path to dataset must be relative to index.js file, not this script! Easy mistake to make
-# ratings_df = pd.read_csv('./recommendation-system/input/small_dataset/ratings.csv')
-# print(ratings_df)
 
-ratings_df.drop(columns=['timestamp'], inplace=True)
+
+
+ratings_df = loader.get_ratings_from_db()
 print(ratings_df)
 
-
-#We must first pre-process the data:
+#Preprocess data
 
 #Get a dataframe with movieIds as index, and userIds as each column. Values are 
 final_df = ratings_df.pivot(index = 'movieId', columns='userId', values='rating')
@@ -45,28 +45,44 @@ print(final_df)
 
 
 
-#We are interested in creating a knn model so we can classify movieIds and get the n nearest neighbours
+#Create Knn model
 from sklearn.neighbors import NearestNeighbors
-import pickle
 knn_model = NearestNeighbors(n_neighbors=11, algorithm='ball_tree')
 knn_model.fit(final_df)
 print(knn_model)
 
-#save knn model with pickle
-#https://machinelearningmastery.com/save-load-machine-learning-models-python-scikit-learn/
-filename = 'knn_model.sav'
-pickle.dump(knn_model, open(filename, 'wb'))
-print('knn_model saved to current directory!')
 
-#save final_df with pickle
-#https://machinelearningmastery.com/save-load-machine-learning-models-python-scikit-learn/
-filename = 'final_df.csv'
+#Save model
 
-# pickle.dump(final_df.to_csv, open(filename, 'wb'))
-final_df.to_csv('final_df.csv')
-print('final_df saved to current directory!')
+import pickle
 
+def save_model_in_database():
+	db.models.delete_many({})
 
+	encoded_knn_model = pickle.dumps(knn_model)
+	# print(encoded_knn_model)
+
+	db.models.insert_one({'name': 'knn-model','model': encoded_knn_model})
+	print("Knn model inserted into database!")
 
 
+def save_model_locally():
+	# save knn model with pickle
+	# https://machinelearningmastery.com/save-load-machine-learning-models-python-scikit-learn/
+	filename = 'knn_model.sav'
+	pickle.dump(knn_model, open(filename, 'wb'))
+	print('knn_model saved to current directory!')
 
+	#save final_df with pickle
+	#https://machinelearningmastery.com/save-load-machine-learning-models-python-scikit-learn/
+	filename = 'final_df.csv'
+
+	# pickle.dump(final_df.to_csv, open(filename, 'wb'))
+	final_df.to_csv('final_df.csv')
+	print('final_df saved to current directory!')
+
+
+
+
+save_model_in_database()
+save_model_locally()
