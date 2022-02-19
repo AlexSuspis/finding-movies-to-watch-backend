@@ -45,7 +45,7 @@ def get_ratings_from_db():
 	return ratings_df
 
 def load_knn_model_locally():
-	filename = 'knn_model.sav'
+	filename = './recommendation-models/knn_model.sav'
 	# filename = 'recommendation-system/knn_model.sav'
 	knn_model = pickle.load(open(filename, 'rb'))
 	# print(knn_model)	
