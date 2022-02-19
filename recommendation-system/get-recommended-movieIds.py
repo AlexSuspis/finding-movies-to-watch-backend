@@ -2,9 +2,15 @@ import sys
 import pandas as pd
 import json
 import loader
+import time
 
 
 movieId = int(sys.argv[1])
+
+measure_runtime = True
+if (measure_runtime):
+	startTime = time.time()
+
 #Script input: movieId : int 
 #Script output: list of n integers, each one being a recommended movieId (similar to the input movieId)  
 
@@ -61,6 +67,12 @@ else:
 	except:
 		print([])
 		
+
+
+if(measure_runtime):
+	totalTime = time.time() - startTime
+	print('script run time: {totalTime: .2f} for movieId {movieId}'.format(totalTime=totalTime, movieId=movieId))
+
 
 
 

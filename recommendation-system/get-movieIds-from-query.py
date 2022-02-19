@@ -7,9 +7,14 @@ from pathlib import Path
 import os
 import pymongo
 import loader
+import time
 
 
 query = sys.argv[1]
+
+measure_runtime = True
+if (measure_runtime):
+	startTime = time.time()
 
 uri = "mongodb+srv://root_user:root123@cluster0.i7dzt.mongodb.net/finding-movies-to-watch?retryWrites=true&w=majority"
 client = pymongo.MongoClient(uri)
@@ -107,6 +112,8 @@ prepareJSONResponse(n=10)
 
 sys.stdout.flush()
 	
-
+if(measure_runtime):
+	totalTime = time.time() - startTime
+	print('script run time: {totalTime: .2f} for query {query}'.format(totalTime=totalTime, query=query))
 
 
