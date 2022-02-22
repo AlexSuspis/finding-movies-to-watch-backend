@@ -7,7 +7,7 @@ import time
 
 movieId = int(sys.argv[1])
 
-measure_runtime = True
+measure_runtime = False 
 if (measure_runtime):
 	startTime = time.time()
 
@@ -26,12 +26,8 @@ else:
 	import pickle
 
 	knn_model = loader.load_knn_model_locally() 
-
-	final_df = pd.read_csv('final_df.csv')
-	# final_df = pd.read_csv('recommendation-system/final_df.csv')
-	final_df.set_index('movieId', inplace=True)
-	# print(final_df)
-	# print(final_df)
+	final_df = loader.load_final_df_locally()
+	
 	try:
 		movie_row = final_df.loc[movieId]
 

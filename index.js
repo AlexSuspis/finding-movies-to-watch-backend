@@ -88,6 +88,7 @@ app.get("/matches/:query", async (req, res) => {
         all_movieIds.push(...movieIds_matching_query.others)
         // console.log(all_movieIds)
 
+
         var movies = [];
         for (let movieId of all_movieIds) {
             let movie = await render_movie_from_id(movieId)

@@ -12,7 +12,7 @@ import time
 
 query = sys.argv[1]
 
-measure_runtime = True
+measure_runtime = False
 if (measure_runtime):
 	startTime = time.time()
 
