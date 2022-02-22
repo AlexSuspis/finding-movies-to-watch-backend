@@ -1,6 +1,8 @@
 import re
 import string
 import random
+from difflib import SequenceMatcher
+from fuzzywuzzy import fuzz
 
 def clean_string(s):
 	#Lowercase string
@@ -16,6 +18,9 @@ def clean_string(s):
 	return s
 	
 # clean_string("Hello: World!!!!")
+
+def get_string_similarity(string1, string2):
+	return SequenceMatcher(None, string1, string2).ratio()
 
 
 

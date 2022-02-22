@@ -30,6 +30,10 @@ def preprocess_movies():
 	movies_df['genres'] = movies_df['genres'].str.replace('Sci-Fi', "SciFi")
 	movies_df['genres'] = movies_df['genres'].str.replace('Film-Noir', "FilmNoir")
 
+	#split genres into a list
+	movies_df['genres'] =  movies_df['genres'].apply(lambda x: x.split())
+	# print(movies_df['genres'])
+
 	#save locally and to database		
 	saver.save_preprocessed_movies_locally(movies_df)
 	# saver.post_preprocessed_movies_to_db(movies_df)
@@ -42,6 +46,8 @@ def compute_similarity_matrix():
 
 	features = movies_df[['movieId','genres']]
 	features.set_index('movieId', inplace=True)
+	features['genres'] =  features['genres'].apply(lambda x: ''.join(x))
+	# print(features['genres'])
 
 	#Inspired by: https://medium.com/geekculture/creating-content-based-movie-recommender-with-python-7f7d1b739c63
 	tfidf = TfidfVectorizer(stop_words='english')
@@ -56,5 +62,5 @@ def compute_similarity_matrix():
 
 
 
-# preprocess_movies()
+preprocess_movies()
 compute_similarity_matrix()
