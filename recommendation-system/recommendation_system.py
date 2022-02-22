@@ -28,11 +28,12 @@ else:
 	print(row)
 
 	#find indices of top 10 highest values in row
+	#Inspired by: https://stackoverflow.com/questions/6910641/how-do-i-get-indices-of-n-maximum-values-in-a-numpy-array
 	recommended_movieIds = np.argpartition(row, -n_recommendations)[-n_recommendations:]
-	utils.get_movie_titles_from_ids(recommended_movieIds)
+	# utils.get_movie_titles_from_ids(recommended_movieIds)
 
 	print(json.dumps(str(list(recommended_movieIds))))
 
 
 
-# utils.get_movie_titles_from_ids(movieIds)
+utils.get_movie_titles_from_ids(movieIds)

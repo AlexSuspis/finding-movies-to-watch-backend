@@ -10,17 +10,21 @@ client = pymongo.MongoClient(uri)
 db = client['finding-movies-to-watch']
 
 serverRequest = False
-if(serverRequest):
-	movies_path = './recommendation-system/input/small_dataset/movies.csv'
+if(serverRequest == True):
+	original_movies_path = './recommendation-system/input/small_dataset/movies.csv'
+	processed_movies_path = './recommendation-system/processed-data/movies_processed.csv'
 	ratings_path = './recommendation-system/input/small_dataset/ratings.csv'
 	knn_model_path = './recommendation-system/knn_model.sav'
 	final_df_path = './recommendation-system/final_df'
+	similarity_matrix_path = './recommendation-system/processed-data/similarity_matrix.dat'
 
 else:	
-	movies_path = './input/small_dataset/movies.csv'
+	original_movies_path = './input/small_dataset/movies.csv'
+	processed_movies_path = './processed-data/movies_processed.csv'
 	ratings_path = './input/small_dataset/ratings.csv'
 	knn_model_path = './knn_model.sav'
 	final_df_path = './final_df'
+	similarity_matrix_path = './processed-data/similarity_matrix.dat'
 
 def load_processed_movies_locally():
 	movies_df = pd.read_csv('./processed-data/movies_processed.csv')	
@@ -28,7 +32,7 @@ def load_processed_movies_locally():
 
 
 def load_original_movies_locally():
-	movies_df = pd.read_csv(movies_path)
+	movies_df = pd.read_csv(original_movies_path)
 	return movies_df
 
 def load_original_ratings_locally():
@@ -38,7 +42,7 @@ def load_original_ratings_locally():
 
 def load_similarity_matrix_locally():
 	try:
-		similarity_matrix = pickle.load(open('./processed-data/similarity_matrix.dat','rb'))
+		similarity_matrix = pickle.load(open(similarity_matrix_path,'rb'))
 		return similarity_matrix
 	except:
 		print('Error occurred when attempting to load similarity_matrix!')
