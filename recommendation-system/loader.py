@@ -38,11 +38,11 @@ def load_original_ratings_locally():
 
 def load_similarity_matrix_locally():
 	try:
-		similarity_matrix = np.load('./processed-data/similarity_matrix.dat', allow_pickle=True)
+		similarity_matrix = pickle.load(open('./processed-data/similarity_matrix.dat','rb'))
+		return similarity_matrix
 	except:
 		print('Error occurred when attempting to load similarity_matrix!')
 		
-	return similarity_matrix
 
 
 def get_movies_from_db():

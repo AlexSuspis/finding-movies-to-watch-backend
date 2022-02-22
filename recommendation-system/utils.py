@@ -3,6 +3,7 @@ import string
 import random
 from difflib import SequenceMatcher
 from fuzzywuzzy import fuzz
+import loader
 
 def clean_string(s):
 	#Lowercase string
@@ -21,8 +22,6 @@ def clean_string(s):
 
 def get_string_similarity(string1, string2):
 	return SequenceMatcher(None, string1, string2).ratio()
-
-
 
 countries = [
 	'Portugal',
@@ -77,3 +76,15 @@ def get_random_providers():
 
 # get_random_countries()
 # get_random_providers()
+
+
+
+def get_movie_titles_from_ids(movieIds):
+	movies_df = loader.load_processed_movies_locally()
+	titles = []
+	for movieId in movieIds:
+		# print(movies_df[movies_df['movieId'] == movieId])
+		# titles.append(movies_df.loc[movieId]['title'])
+		print(movies_df.loc[movieId]['title'])
+
+	# print(titles)

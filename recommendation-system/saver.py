@@ -25,7 +25,7 @@ def post_preprocessed_movies_to_db():
 
 def save_similarity_matrix_locally(similarity_matrix):
 	try:
-		similarity_matrix.dump('./processed-data/similarity_matrix.dat')
+		pickle.dump(similarity_matrix, open('./processed-data/similarity_matrix.dat','wb'))
 		print('similarity_matrix successfully saved!')
 	except:
 		print('Something went wrong while attempting to save similarity_matrix')
