@@ -105,12 +105,12 @@ app.get("/matches/:query", async (req, res) => {
     };
 
 });
-const get_recommended_movieIds = (movieId) => {
+const get_recommended_movieIds = (query) => {
     //promise code inspired by:
     //https://www.geeksforgeeks.org/how-to-communicate-json-data-between-python-and-node-js/
     return new Promise((resolve, reject) => {
         try {
-            const python = spawn("python", ["./recommendation-system/get-recommended-movieIds.py", movieId]);
+            const python = spawn("python", ["./recommendation-system/recommendation_system.py", query]);
 
             python.stdout.on("data", (data) => {
                 var recommended_movieIds = JSON.parse(data.toString())
@@ -128,19 +128,21 @@ const get_recommended_movieIds = (movieId) => {
 };
 //Input: movieId
 //Output: 10 movieIds most similar to input movieId 
-app.get('/recommendations/:movieId', async (req, res) => {
-    const { movieId } = req.params
-    console.log(movieId)
+app.get('/recommendations/:query', async (req, res) => {
+    const { query } = req.params
+    console.log(query)
+
 
     try {
         var recommended_movieIds = [];
-        recommended_movieIds = await get_recommended_movieIds(movieId)
-        console.log(recommended_movieIds)
+        recommended_movieIds = await get_recommended_movieIds(query)
+        // console.log(recommended_movieIds)
+        // console.log(typeof (recommended_movieIds))
 
         var movies = [];
         for (let movieId of recommended_movieIds) {
             let movie = await render_movie_from_id(movieId)
-            console.log(movie)
+            // console.log(movie)
             movies.push(movie)
         }
         console.log(movies)
@@ -148,7 +150,7 @@ app.get('/recommendations/:movieId', async (req, res) => {
         res.send(JSON.stringify(movies))
 
     } catch (err) {
-        console.log('error in GET /recommendations/:movieId endpoint: ', err)
+        console.log('error in GET /recommendations/:query endpoint: ', err)
 
         res.status(404)
         res.send({ "errorMessage": "Something went wrong!" })

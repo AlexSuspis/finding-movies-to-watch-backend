@@ -9,7 +9,7 @@ uri = "mongodb+srv://root_user:root123@cluster0.i7dzt.mongodb.net/finding-movies
 client = pymongo.MongoClient(uri)
 db = client['finding-movies-to-watch']
 
-serverRequest = False
+serverRequest = True
 if(serverRequest == True):
 	original_movies_path = './recommendation-system/input/small_dataset/movies.csv'
 	processed_movies_path = './recommendation-system/processed-data/movies_processed.csv'
@@ -27,7 +27,7 @@ else:
 	similarity_matrix_path = './processed-data/similarity_matrix.dat'
 
 def load_processed_movies_locally():
-	movies_df = pd.read_csv('./processed-data/movies_processed.csv')	
+	movies_df = pd.read_csv(processed_movies_path)	
 	return movies_df
 
 
