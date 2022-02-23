@@ -30,3 +30,4 @@ def save_similarity_matrix_locally(similarity_matrix):
 	except:
 		print('Something went wrong while attempting to save similarity_matrix')
 
+	pass

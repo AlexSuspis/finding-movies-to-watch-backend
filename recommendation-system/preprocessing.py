@@ -3,6 +3,7 @@ import utils
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import linear_kernel, cosine_similarity
 import numpy as np
+import pandas as pd
 
 
 def preprocess_movies():
@@ -45,8 +46,11 @@ def compute_similarity_matrix():
 	movies_df = loader.load_processed_movies_locally()
 
 	features = movies_df[['movieId','genres']]
-	features.set_index('movieId', inplace=True)
-	features['genres'] =  features['genres'].apply(lambda x: ''.join(x))
+	print(features)
+	# features.set_index('movieId', inplace=True)
+	# print(features)
+
+	features['genres'] = features['genres'].apply(lambda x: ''.join(x))
 	# print(features['genres'])
 
 	#Inspired by: https://medium.com/geekculture/creating-content-based-movie-recommender-with-python-7f7d1b739c63
@@ -57,10 +61,13 @@ def compute_similarity_matrix():
 	# print(tfidf_matrix[4,:])
 
 	similarity_matrix = cosine_similarity(tfidf_matrix, tfidf_matrix)
+	movieIds = movies_df['movieId'].values
+	sim_mat_df = pd.DataFrame(data=similarity_matrix, columns=movieIds, index=movieIds)
+	print(sim_mat_df)
 
-	saver.save_similarity_matrix_locally(similarity_matrix)
+	saver.save_similarity_matrix_locally(sim_mat_df)
 
 
 
-preprocess_movies()
+# preprocess_movies()
 compute_similarity_matrix()

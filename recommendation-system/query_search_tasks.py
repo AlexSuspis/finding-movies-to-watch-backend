@@ -26,6 +26,6 @@ def find_movieIds_from_closest_titles_to(query, n):
 
 
 
-# result = find_movieIds_from_closest_titles_to('superman', 5)
+# result = find_movieIds_from_closest_titles_to('iron man', 5)
 # utils.get_movie_titles_from_ids(result)
 # print(result)
