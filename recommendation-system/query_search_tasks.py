@@ -13,7 +13,8 @@ def find_movieIds_from_closest_titles_to(query, n):
 
 	#sort
 	movies_df.sort_values(by='similarity_to_query', ascending=False, axis=0, inplace=True)
-	# print(movies_df['similarity_to_query'])
+	print(movies_df['similarity_to_query'])
+
 
 	#no matches found
 	if movies_df['similarity_to_query'].iloc[0] < 0.7:
