@@ -80,11 +80,12 @@ def get_random_providers():
 
 
 def get_movie_titles_from_ids(movieIds):
+	# print(movieIds.tolist())
 	movies_df = loader.load_processed_movies_locally()
 	titles = []
 	for movieId in movieIds:
 		# print(movies_df[movies_df['movieId'] == movieId])
 		# titles.append(movies_df.loc[movieId]['title'])
-		print(movies_df.loc[movieId]['title'])
+		print(movies_df[movies_df['movieId'] == movieId]['title'].values[0], "with movieId: " + str(movieId))
 
 	# print(titles)
