@@ -110,7 +110,7 @@ def explore_datasets():
 	#merge
 	merged_df = small_processed_movies_df.merge(filtered_big_movies_df[['overview','year','clean_title']], how='left', left_on='clean_title', right_on='clean_title')
 	merged_df.drop_duplicates(inplace=True)
-	print(merged_df['overview'].isna().sum())
+	print("Number of NaN in merged movies overview column: " + str(merged_df['overview'].isna().sum()))
 
 	print(merged_df.shape)
 
