@@ -20,8 +20,13 @@ def save_preprocessed_movies_locally(movies_df):
 		print('An error occurred while attempting to save processed movie_df locally') 
 
 
-def post_preprocessed_movies_to_db():
-	pass
+def post_preprocessed_movies_to_db(movies_df):
+	db.movies.delete_many({})
+	print('all movie records in movie collection deleted')
+
+	db.movies.insert_many(movies_df.to_dict('records'))
+	print("inserted movies from dataset into movie collection")
+	return
 
 def save_similarity_matrix_locally(similarity_matrix):
 	try:

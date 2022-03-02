@@ -39,7 +39,9 @@ def preprocess_movies():
 
 	#save locally and to database		
 	saver.save_preprocessed_movies_locally(movies_df)
-	# saver.post_preprocessed_movies_to_db(movies_df)
+	saver.post_preprocessed_movies_to_db(movies_df)
+	
+	return
 
 
 def compute_similarity_matrix():
