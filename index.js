@@ -62,7 +62,7 @@ const render_movie_from_id = async (movieId) => {
     console.log("movie received!: ", movieId)
 
     const movie = await Movie.findOne({ movieId })
-    console.log(movie)
+    // console.log(movie)
     return movie
 }
 

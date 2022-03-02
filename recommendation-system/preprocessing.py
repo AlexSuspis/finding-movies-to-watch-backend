@@ -67,7 +67,12 @@ def compute_similarity_matrix():
 
 	saver.save_similarity_matrix_locally(sim_mat_df)
 
+def explore_datasets():
+	small_movies_df = loader.load_original_movies_locally()
+	big_movies_df = pd.read_csv('input/big_dataset/movies_metadata')
+	print(small_movies_df)
+	print(big_movies_df)
 
-
+explore_datasets()
 # preprocess_movies()
-compute_similarity_matrix()
+# compute_similarity_matrix()

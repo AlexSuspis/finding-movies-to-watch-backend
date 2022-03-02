@@ -9,7 +9,8 @@ uri = "mongodb+srv://root_user:root123@cluster0.i7dzt.mongodb.net/finding-movies
 client = pymongo.MongoClient(uri)
 db = client['finding-movies-to-watch']
 
-serverRequest = False
+serverRequest = True
+# serverRequest = False
 if(serverRequest == True):
 	original_movies_path = './recommendation-system/input/small_dataset/movies.csv'
 	processed_movies_path = './recommendation-system/processed-data/movies_processed.csv'
