@@ -4,6 +4,7 @@ import random
 from difflib import SequenceMatcher
 from fuzzywuzzy import fuzz
 import loader
+from datetime import datetime
 
 def clean_string(s):
 	#Lowercase string
@@ -19,6 +20,23 @@ def clean_string(s):
 	return s
 	
 # clean_string("Hello: World!!!!")
+
+def is_invalid_date_format(date_string):
+	try:
+		date = datetime.strptime(date_string, "%Y-%m-%d")
+		# print(date)
+		return False
+	except:
+		return True
+
+def get_year_from_date(date_string):
+	# print(date_string)
+	date = datetime.strptime(date_string, "%Y-%m-%d")
+	# print(date.year)
+	return date.year
+
+# date_string = '1906-01-01'
+# get_year_from_date(date_string)
 
 def get_string_similarity(string1, string2):
 	return SequenceMatcher(None, string1, string2).ratio()
