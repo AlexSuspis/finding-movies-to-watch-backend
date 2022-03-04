@@ -4,24 +4,26 @@ import json
 import numpy as np
 import utils
 
-def predict_similairity_matrix(movieId, n_recommendations):
+def predict_similarity_matrix(matched_movieIds):
 	similarity_matrix = loader.load_similarity_matrix_locally()
-	# print(similarity_matrix)
+
+	movieId = matched_movieIds[0]
 
 	row = similarity_matrix[movieId]
-	# print(row)
-	sorted_row = row.sort_values(ascending=False)
+
+	#remove records in matched_movieIds, so we don't get recommendation results which have already been found in the search task
+	filtered_row = row[~row.index.isin(matched_movieIds)]
+
+	sorted_row = filtered_row.sort_values(ascending=False)
 	# print(sorted_row)
-	recommended_movieIds = sorted_row[:n_recommendations].index
-	# print(recommended_movieIds)
+	recommended_movieIds = sorted_row[:24-len(matched_movieIds)].index
+
+	# utils.get_movie_titles_from_ids(recommended_movieIds)
 
 	result = json.dumps(recommended_movieIds.tolist())
 	print(result)
 
 
-movieId = int(sys.argv[1])
-predict_similarity_matrix(movieId, 15)
+matched_movieIds = json.loads(sys.argv[1])
 
-# n_total = 20
-# n_matches = 5
-# n_recommendations = n_total - n_matches
+predict_similarity_matrix(matched_movieIds)

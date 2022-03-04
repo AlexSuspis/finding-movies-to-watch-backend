@@ -33,13 +33,13 @@ app.get('/', (req, res) => {
 //auth endpoints
 //Login, register, logout
 
-const get_movieIds_from_query = (query) => {
+const get_movieIds_from_query = (query, n) => {
     //promise code inspired by:
     //https://www.geeksforgeeks.org/how-to-communicate-json-data-between-python-and-node-js/
     return new Promise((resolve, reject) => {
         try {
 
-            const python = spawn("python", ["./recommendation-system/find_matches_for_query.py", query]);
+            const python = spawn("python", ["./recommendation-system/find_matches_for_query.py", query, n]);
 
             python.stdout.on("data", (data) => {
                 movieIds = JSON.parse(data.toString())
@@ -73,7 +73,7 @@ app.get("/matches/:query", async (req, res) => {
 
     try {
 
-        var movieIds_matching_query = await get_movieIds_from_query(query)
+        var movieIds_matching_query = await get_movieIds_from_query(query, 3)
         console.log(movieIds_matching_query)
 
         if (Object.keys(movieIds_matching_query).length == 0) {
@@ -99,12 +99,12 @@ app.get("/matches/:query", async (req, res) => {
     };
 
 });
-const get_recommended_movieIds = (query) => {
+const get_recommended_movieIds = (movieIds) => {
     //promise code inspired by:
     //https://www.geeksforgeeks.org/how-to-communicate-json-data-between-python-and-node-js/
     return new Promise((resolve, reject) => {
         try {
-            const python = spawn("python", ["./recommendation-system/recommendation_system.py", query]);
+            const python = spawn("python", ["./recommendation-system/recommendation_system.py", movieIds]);
 
             python.stdout.on("data", (data) => {
                 var recommended_movieIds = JSON.parse(data.toString())
@@ -122,14 +122,15 @@ const get_recommended_movieIds = (query) => {
 };
 //Input: movieId
 //Output: 10 movieIds most similar to input movieId 
-app.get('/recommendations/:query', async (req, res) => {
-    const { query } = req.params
-    console.log(query)
+app.get('/recommendations/:movieIds', async (req, res) => {
+    let { movieIds } = req.params
+
+    // movieIds = JSON.parse(movieIds)
 
 
     try {
         var recommended_movieIds = [];
-        recommended_movieIds = await get_recommended_movieIds(query)
+        recommended_movieIds = await get_recommended_movieIds(movieIds)
         // console.log(recommended_movieIds)
         // console.log(typeof (recommended_movieIds))
 
@@ -144,7 +145,7 @@ app.get('/recommendations/:query', async (req, res) => {
         res.send(JSON.stringify(movies))
 
     } catch (err) {
-        console.log('error in GET /recommendations/:query endpoint: ', err)
+        console.log('error in GET /recommendations/:movieIds endpoint: ', err)
 
         res.status(404)
         res.send({ "errorMessage": "Something went wrong!" })

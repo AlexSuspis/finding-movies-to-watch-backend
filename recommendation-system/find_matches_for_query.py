@@ -35,4 +35,5 @@ def find_movieIds_from_closest_titles_to(query, n):
 # print(result)
 
 query = str(sys.argv[1])
-find_movieIds_from_closest_titles_to(query, 3)
+n = int(sys.argv[2])
+find_movieIds_from_closest_titles_to(query, n)
