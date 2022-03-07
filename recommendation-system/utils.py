@@ -41,6 +41,7 @@ def get_year_from_date(date_string):
 def get_string_similarity(string1, string2):
 	return SequenceMatcher(None, string1, string2).ratio()
 
+
 countries = [
 	'Portugal',
 	'United Kingdom',
@@ -50,6 +51,25 @@ countries = [
 	'China',
 	'India',
 ]
+
+country_flag_urls = {
+	'Portugal': 'http://www.geognos.com/api/en/countries/flag/PT.png',
+	'United Kingdom': 'http://www.geognos.com/api/en/countries/flag/GB.png',
+	'United States': 'http://www.geognos.com/api/en/countries/flag/US.png',
+	'France': 'http://www.geognos.com/api/en/countries/flag/FR.png',
+	'Brazil': 'http://www.geognos.com/api/en/countries/flag/BR.png',
+	'China': 'http://www.geognos.com/api/en/countries/flag/CN.png',
+	'India': 'http://www.geognos.com/api/en/countries/flag/IN.png',
+}
+
+def get_country_flag_urls(countries):
+	urls = []
+	for country in countries:
+		urls.append(country_flag_urls[country])
+
+	return urls
+
+# print(get_country_flag_urls(['Portugal', 'Brazil']))
 
 providers = [
 	'Netflix',

@@ -120,6 +120,7 @@ const get_recommended_movieIds = (movieIds) => {
         }
     });
 };
+
 //Input: movieId
 //Output: 10 movieIds most similar to input movieId 
 app.get('/recommendations/:movieIds', async (req, res) => {

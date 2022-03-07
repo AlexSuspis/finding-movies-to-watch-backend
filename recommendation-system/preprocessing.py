@@ -23,6 +23,9 @@ def preprocess_movies():
 	movies_df['countries'] = movies_df['title'].apply(lambda x: utils.get_random_countries())
 	# print(movies_df)
 
+	movies_df['country_flag_url'] = movies_df['countries'].apply(lambda x: utils.get_country_flag_urls(x))
+	print(movies_df[['countries', 'country_flag_url']])
+
 	#providers	
 	movies_df['providers'] = movies_df['title'].apply(lambda x: utils.get_random_providers())
 	# print(movies_df)
@@ -59,7 +62,12 @@ def compute_similarity_matrix():
 
 	#Inspired by: https://medium.com/geekculture/creating-content-based-movie-recommender-with-python-7f7d1b739c63
 	tfidf = TfidfVectorizer(stop_words='english')
+	#each movie will get 21 columns, each value representing the 'weight' of the feature (in this case genre) on describing the dataset.
+	#maybe I can expand this with other features? How? E.g. plot, director, actors...
 	tfidf_matrix = tfidf.fit_transform(features['genres'])
+	# print(tfidf_matrix)
+	# print(tfidf_matrix.shape)
+	# print(list(enumerate(tfidf.get_feature_names())))
 
 	#Check that movie with only 1 genre has that genre's tfidf value to 1 (most important value in describing the document)
 	# print(tfidf_matrix[4,:])
@@ -118,5 +126,5 @@ def explore_datasets():
 
 
 preprocess_movies()
-explore_datasets()
+# explore_datasets()
 # compute_similarity_matrix()

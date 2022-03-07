@@ -5,6 +5,7 @@ import numpy as np
 import utils
 
 def predict_similarity_matrix(matched_movieIds):
+	#Load similarity matrix where the values are the similarity score, and the columns/index are the movieId
 	similarity_matrix = loader.load_similarity_matrix_locally()
 
 	movieId = matched_movieIds[0]
