@@ -23,8 +23,8 @@ def preprocess_movies():
 	movies_df['countries'] = movies_df['title'].apply(lambda x: utils.get_random_countries())
 	# print(movies_df)
 
-	movies_df['country_flag_url'] = movies_df['countries'].apply(lambda x: utils.get_country_flag_urls(x))
-	print(movies_df[['countries', 'country_flag_url']])
+	movies_df['country_flag_urls'] = movies_df['countries'].apply(lambda x: utils.get_country_flag_urls(x))
+	print(movies_df[['countries', 'country_flag_urls']])
 
 	#providers	
 	movies_df['providers'] = movies_df['title'].apply(lambda x: utils.get_random_providers())
