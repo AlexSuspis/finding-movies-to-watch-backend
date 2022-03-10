@@ -61,7 +61,6 @@ country_flag_urls = {
 	'China': 'http://www.geognos.com/api/en/countries/flag/CN.png',
 	'India': 'http://www.geognos.com/api/en/countries/flag/IN.png',
 }
-
 def get_country_flag_urls(countries):
 	urls = []
 	for country in countries:
@@ -70,6 +69,24 @@ def get_country_flag_urls(countries):
 	return urls
 
 # print(get_country_flag_urls(['Portugal', 'Brazil']))
+
+
+#Copyright-free icons from https://img.icons8.com/ 
+provider_icon_urls = {
+	'Netflix': 'https://img.icons8.com/office/50/000000/no-video--v2.png',	
+	'Amazon Video': 'https://img.icons8.com/material-rounded/452/video-playlist.png',	
+	'HBO Max': 'https://img.icons8.com/material-outlined/50/000000/laptop-play-video.png',	
+	'Youtube': 'https://img.icons8.com/ios/344/video-message.png',	
+}
+
+def get_provider_icon_urls(providers):
+	urls = []
+	for provider in providers:
+		urls.append(provider_icon_urls[provider])
+
+	return urls
+
+# print(get_provider_icon_urls(['Youtube', 'HBO Max']))
 
 providers = [
 	'Netflix',

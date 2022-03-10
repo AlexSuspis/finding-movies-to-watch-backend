@@ -24,11 +24,15 @@ def preprocess_movies():
 	# print(movies_df)
 
 	movies_df['country_flag_urls'] = movies_df['countries'].apply(lambda x: utils.get_country_flag_urls(x))
-	print(movies_df[['countries', 'country_flag_urls']])
+	# print(movies_df[['countries', 'country_flag_urls']])
 
 	#providers	
 	movies_df['providers'] = movies_df['title'].apply(lambda x: utils.get_random_providers())
 	# print(movies_df)
+
+	movies_df['provider_icon_urls'] = movies_df['providers'].apply(lambda x: utils.get_provider_icon_urls(x))
+	# print(movies_df[['providers', 'provider_icon_urls']])
+
 
 	#Inspired by: https://medium.com/geekculture/creating-content-based-movie-recommender-with-python-7f7d1b739c63
 	movies_df['genres'] = movies_df['genres'].str.replace('Sci-Fi', "SciFi")
