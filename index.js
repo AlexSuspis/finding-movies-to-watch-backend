@@ -104,7 +104,7 @@ const get_recommended_movieIds = (movieIds) => {
     //https://www.geeksforgeeks.org/how-to-communicate-json-data-between-python-and-node-js/
     return new Promise((resolve, reject) => {
         try {
-            const python = spawn("python", ["./recommendation-system/recommendation_system.py", movieIds]);
+            const python = spawn("python", ["./recommendation-system/find_recommendations_for_movies.py", movieIds]);
 
             python.stdout.on("data", (data) => {
                 var recommended_movieIds = JSON.parse(data.toString())
