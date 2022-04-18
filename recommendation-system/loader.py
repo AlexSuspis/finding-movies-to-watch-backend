@@ -9,7 +9,7 @@ uri = "mongodb+srv://root_user:root123@cluster0.i7dzt.mongodb.net/finding-movies
 client = pymongo.MongoClient(uri)
 db = client['finding-movies-to-watch']
 
-<<<<<<< HEAD
+
 serverRequest = False
 if(serverRequest):
 	filename = './recommendation-system/input/small_dataset/movies.csv'
@@ -30,7 +30,7 @@ def load_ratings_locally():
 	ratings_df.drop(columns=['timestamp'], inplace=True)
 	return ratings_df
 
-=======
+
 serverRequest = True
 # serverRequest = False
 if(serverRequest == True):
@@ -77,14 +77,14 @@ def get_movies_from_db():
 	movies_df = pd.DataFrame(movies).drop(columns=['_id'])
 	return movies_df
 
->>>>>>> recommender-system-2.0
+
 def get_ratings_from_db():
 	ratings = db.original_ratings.find()
 	ratings_df = pd.DataFrame(ratings).drop(columns=['_id'])
 	return ratings_df
 
 def load_knn_model_locally():
-<<<<<<< HEAD
+
 	if serverRequest:
 		path = './recommendation-system/knn_model.sav'
 	else: 
@@ -100,12 +100,12 @@ def load_final_df_locally():
 		path = './final_df'
 
 	final_df = pd.read_csv(path)
-=======
+
 	knn_model = pickle.load(open(knn_model_path, 'rb'))
 	return knn_model
 
 def load_final_df_locally():
 	final_df = pd.read_csv(final_df_path)
->>>>>>> recommender-system-2.0
+
 	final_df.set_index('movieId', inplace=True)
 	return final_df

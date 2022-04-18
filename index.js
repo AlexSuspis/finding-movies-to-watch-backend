@@ -83,16 +83,16 @@ app.get("/matches/:query", async (req, res) => {
             return
         }
 
-<<<<<<< HEAD
+
         //Render all movie_ids into JSON movie objects by querying database
-        var all_movieIds = [];
-        all_movieIds.push(movieIds_matching_query.primaryId)
-        all_movieIds.push(...movieIds_matching_query.others)
+        // var all_movieIds = [];
+        // all_movieIds.push(movieIds_matching_query.primaryId)
+        // all_movieIds.push(...movieIds_matching_query.others)
         // console.log(all_movieIds)
 
 
-=======
->>>>>>> recommender-system-2.0
+
+
         var movies = [];
         for (let movieId of movieIds_matching_query) {
             let movie = await render_movie_from_id(movieId)
