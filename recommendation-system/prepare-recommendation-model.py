@@ -69,13 +69,13 @@ def save_model_in_database():
 def save_model_locally():
 	# save knn model with pickle
 	# https://machinelearningmastery.com/save-load-machine-learning-models-python-scikit-learn/
-	filename = 'knn_model.sav'
-	pickle.dump(knn_model, open(filename, 'wb'))
+	path = './recommendation-models/knn_model.sav'
+	pickle.dump(knn_model, open(path, 'wb'))
 	print('knn_model saved to current directory!')
 
 	#save final_df with pickle
 	#https://machinelearningmastery.com/save-load-machine-learning-models-python-scikit-learn/
-	filename = 'final_df.csv'
+	path = './processed-data/final_df.csv'
 
 	# pickle.dump(final_df.to_csv, open(filename, 'wb'))
 	final_df.to_csv('final_df.csv')

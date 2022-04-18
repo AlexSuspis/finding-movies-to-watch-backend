@@ -33,13 +33,13 @@ app.get('/', (req, res) => {
 //auth endpoints
 //Login, register, logout
 
-const get_movieIds_from_query = (query) => {
+const get_movieIds_from_query = (query, n) => {
     //promise code inspired by:
     //https://www.geeksforgeeks.org/how-to-communicate-json-data-between-python-and-node-js/
     return new Promise((resolve, reject) => {
         try {
 
-            const python = spawn("python", ["./recommendation-system/get-movieIds-from-query.py", query]);
+            const python = spawn("python", ["./recommendation-system/find_matches_for_query.py", query, n]);
 
             python.stdout.on("data", (data) => {
                 movieIds = JSON.parse(data.toString())
@@ -62,7 +62,7 @@ const render_movie_from_id = async (movieId) => {
     console.log("movie received!: ", movieId)
 
     const movie = await Movie.findOne({ movieId })
-    console.log(movie)
+    // console.log(movie)
     return movie
 }
 
@@ -72,7 +72,8 @@ app.get("/matches/:query", async (req, res) => {
     console.log(`query is: ${query}`)
 
     try {
-        var movieIds_matching_query = await get_movieIds_from_query(query)
+
+        var movieIds_matching_query = await get_movieIds_from_query(query, 3)
         console.log(movieIds_matching_query)
 
         if (Object.keys(movieIds_matching_query).length == 0) {
@@ -82,6 +83,7 @@ app.get("/matches/:query", async (req, res) => {
             return
         }
 
+<<<<<<< HEAD
         //Render all movie_ids into JSON movie objects by querying database
         var all_movieIds = [];
         all_movieIds.push(movieIds_matching_query.primaryId)
@@ -89,14 +91,15 @@ app.get("/matches/:query", async (req, res) => {
         // console.log(all_movieIds)
 
 
+=======
+>>>>>>> recommender-system-2.0
         var movies = [];
-        for (let movieId of all_movieIds) {
+        for (let movieId of movieIds_matching_query) {
             let movie = await render_movie_from_id(movieId)
             console.log(movie)
             movies.push(movie)
         }
         console.log(movies)
-
         res.send(JSON.stringify(movies))
 
     } catch (err) {
@@ -106,12 +109,12 @@ app.get("/matches/:query", async (req, res) => {
     };
 
 });
-const get_recommended_movieIds = (movieId) => {
+const get_recommended_movieIds = (movieIds) => {
     //promise code inspired by:
     //https://www.geeksforgeeks.org/how-to-communicate-json-data-between-python-and-node-js/
     return new Promise((resolve, reject) => {
         try {
-            const python = spawn("python", ["./recommendation-system/get-recommended-movieIds.py", movieId]);
+            const python = spawn("python", ["./recommendation-system/find_recommendations_for_movies.py", movieIds]);
 
             python.stdout.on("data", (data) => {
                 var recommended_movieIds = JSON.parse(data.toString())
@@ -127,21 +130,25 @@ const get_recommended_movieIds = (movieId) => {
         }
     });
 };
+
 //Input: movieId
 //Output: 10 movieIds most similar to input movieId 
-app.get('/recommendations/:movieId', async (req, res) => {
-    const { movieId } = req.params
-    console.log(movieId)
+app.get('/recommendations/:movieIds', async (req, res) => {
+    let { movieIds } = req.params
+
+    // movieIds = JSON.parse(movieIds)
+
 
     try {
         var recommended_movieIds = [];
-        recommended_movieIds = await get_recommended_movieIds(movieId)
-        console.log(recommended_movieIds)
+        recommended_movieIds = await get_recommended_movieIds(movieIds)
+        // console.log(recommended_movieIds)
+        // console.log(typeof (recommended_movieIds))
 
         var movies = [];
         for (let movieId of recommended_movieIds) {
             let movie = await render_movie_from_id(movieId)
-            console.log(movie)
+            // console.log(movie)
             movies.push(movie)
         }
         console.log(movies)
@@ -149,7 +156,7 @@ app.get('/recommendations/:movieId', async (req, res) => {
         res.send(JSON.stringify(movies))
 
     } catch (err) {
-        console.log('error in GET /recommendations/:movieId endpoint: ', err)
+        console.log('error in GET /recommendations/:movieIds endpoint: ', err)
 
         res.status(404)
         res.send({ "errorMessage": "Something went wrong!" })
