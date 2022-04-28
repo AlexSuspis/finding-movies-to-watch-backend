@@ -11,7 +11,8 @@ def find_movieIds_from_closest_titles_to(query, n):
 	clean_query = utils.clean_string(query)
 	# print(clean_query)
 
-	movies_df['similarity_to_query'] = movies_df['clean_title'].apply(lambda clean_title: utils.get_string_similarity(clean_title, clean_query))
+	movies_df['similarity_to_query'] = movies_df['clean_title'].apply(
+			lambda clean_title: utils.get_string_similarity(clean_title, clean_query))
 	# print(movies_df['similarity_to_query'])
 
 	#sort

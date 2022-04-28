@@ -57,31 +57,20 @@ def compute_similarity_matrix():
 	movies_df = loader.load_processed_movies_locally()
 
 	features = movies_df[['movieId','genres']]
-	print(features)
-	# features.set_index('movieId', inplace=True)
-	# print(features)
-
 	features['genres'] = features['genres'].apply(lambda x: ''.join(x))
-	# print(features['genres'])
 
 	#Inspired by: https://medium.com/geekculture/creating-content-based-movie-recommender-with-python-7f7d1b739c63
 	tfidf = TfidfVectorizer(stop_words='english')
-	#each movie will get 21 columns, each value representing the 'weight' of the feature (in this case genre) on describing the dataset.
-	#maybe I can expand this with other features? How? E.g. plot, director, actors...
+	#each movie will get 21 columns, each value representing the 'weight'
+		# of the feature (in this case genre) on describing the dataset.
 	tfidf_matrix = tfidf.fit_transform(features['genres'])
-	# print(tfidf_matrix)
-	# print(tfidf_matrix.shape)
-	# print(list(enumerate(tfidf.get_feature_names())))
-
-	#Check that movie with only 1 genre has that genre's tfidf value to 1 (most important value in describing the document)
-	# print(tfidf_matrix[4,:])
 
 	similarity_matrix = cosine_similarity(tfidf_matrix, tfidf_matrix)
 	movieIds = movies_df['movieId'].values
 	sim_mat_df = pd.DataFrame(data=similarity_matrix, columns=movieIds, index=movieIds)
-	print(sim_mat_df)
 
 	saver.save_similarity_matrix_locally(sim_mat_df)
+	return
 
 def explore_datasets():
 
