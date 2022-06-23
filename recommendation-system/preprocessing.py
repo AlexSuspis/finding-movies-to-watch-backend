@@ -10,7 +10,8 @@ import pickle
 
 def preprocess_movies():
 
-	movies_df = loader.load_original_movies_locally()
+	# movies_df = loader.load_original_movies_locally()
+	movies_df = loader.get_movies_from_db()
 	print(movies_df.columns)
 	print(len(movies_df))
 

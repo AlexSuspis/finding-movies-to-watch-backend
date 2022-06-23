@@ -17,17 +17,18 @@ def save_preprocessed_movies_locally(movies_df):
 		movies_df.to_csv(directory+filename, index=False)
 		print(f'processed movies dataframe successfully saved in {directory} as: {filename}')
 
-	except:
+	except Exception as e:
 		print('An error occurred while attempting to save processed movie_df locally') 
+		print(e)
 
 
 def post_preprocessed_movies_to_db(movies_df):
-	# db.movies.delete_many({})
+	db.movies.delete_many({})
 	# print('all movie records in movie collection deleted')
 
-	print("Hello from saver.py, working db upload")
-	print(movies_df.head(20))
-	print(movies_df.tail(20))
+	# print("Hello from saver.py, working db upload")
+	# print(movies_df.head(20))
+	# print(movies_df.tail(20))
 	# print(movies_df.dtypes)
 
 	db.movies.insert_many(movies_df.to_dict('records'))

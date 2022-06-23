@@ -5,6 +5,7 @@ import sys
 
 def find_movieIds_from_closest_titles_to(query, n):
 	movies_df = loader.load_processed_movies_locally()
+	# movies_df = loader.get_processed_movies_from_db()
 	# print(movies_df.head())
 	# print(movies_df['title'])
 	# print(movies_df['clean_title'])
