@@ -1,5 +1,5 @@
 node_modules/
 recommendation-system/big_dataset
-recommendation-system/processed-data
+recommendation-system/processed-data/similarity_matrix.csv
 recommendation-system/input
 
