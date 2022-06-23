@@ -1,6 +1,7 @@
+.DS_Store
 node_modules/
-recommendation-system/big_dataset
+recommendation-system/big_dataset/
 recommendation-system/processed-data/similarity_matrix.csv
 recommendation-system/processed-data/similarity_matrix.dat
-recommendation-system/input
+recommendation-system/input/
 
