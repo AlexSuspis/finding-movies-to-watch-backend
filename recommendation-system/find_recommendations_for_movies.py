@@ -6,21 +6,23 @@ import utils
 
 def predict_similarity_matrix(matched_movieIds):
 	#Load similarity matrix where the values are the similarity score, and the columns/index are the movieId
-	similarity_matrix = loader.load_similarity_matrix_locally()
+	# similarity_matrix = loader.load_similarity_matrix_locally()
+	# print(similarity_matrix)
 
-	movieId = matched_movieIds[0]
+	# movieId = matched_movieIds[0]
 
-	row = similarity_matrix[movieId]
+	# row = similarity_matrix[movieId]
+	row = loader.load_movie_row_from_similarity_matrix_from_db()
 
-	#remove records in matched_movieIds, so we don't get recommendation results 
-		#which have already been found in the search task
-	filtered_row = row[~row.index.isin(matched_movieIds)]
+	# #remove records in matched_movieIds, so we don't get recommendation results 
+	# 	#which have already been found in the search task
+	# filtered_row = row[~row.index.isin(matched_movieIds)]
 
-	sorted_row = filtered_row.sort_values(ascending=False)
-	recommended_movieIds = sorted_row[:24-len(matched_movieIds)].index
+	# sorted_row = filtered_row.sort_values(ascending=False)
+	# recommended_movieIds = sorted_row[:24-len(matched_movieIds)].index
 
-	result = json.dumps(recommended_movieIds.tolist())
-	print(result)
+	# result = json.dumps(recommended_movieIds.tolist())
+	# print(result)
 
 
 matched_movieIds = json.loads(sys.argv[1])

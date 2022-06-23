@@ -55,6 +55,7 @@ def compute_similarity_matrix():
 	np.set_printoptions(threshold=np.inf)
 
 	movies_df = loader.load_processed_movies_locally()
+	print(movies_df)
 
 	features = movies_df[['movieId','genres']]
 	features['genres'] = features['genres'].apply(lambda x: ''.join(x))
@@ -69,7 +70,8 @@ def compute_similarity_matrix():
 	movieIds = movies_df['movieId'].values
 	sim_mat_df = pd.DataFrame(data=similarity_matrix, columns=movieIds, index=movieIds)
 
-	saver.save_similarity_matrix_locally(sim_mat_df)
+	# saver.save_similarity_matrix_locally(sim_mat_df)
+	saver.save_similarity_matrix_to_db(sim_mat_df)
 	return
 
 def explore_datasets():
@@ -118,6 +120,6 @@ def explore_datasets():
 	print(merged_df.shape)
 
 
-preprocess_movies()
+# preprocess_movies()
 # explore_datasets()
-# compute_similarity_matrix()
+compute_similarity_matrix()

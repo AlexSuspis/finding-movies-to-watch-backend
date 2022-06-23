@@ -4,7 +4,6 @@ import pickle
 import numpy as np
 
 
-
 uri = "mongodb+srv://root_user:root123@cluster0.i7dzt.mongodb.net/finding-movies-to-watch?retryWrites=true&w=majority"
 client = pymongo.MongoClient(uri)
 db = client['finding-movies-to-watch']
@@ -31,8 +30,8 @@ def load_ratings_locally():
 	return ratings_df
 
 
-serverRequest = True
-# serverRequest = False
+# serverRequest = True
+serverRequest = False
 if(serverRequest == True):
 	original_movies_path = './recommendation-system/input/small_dataset/movies.csv'
 	processed_movies_path = './recommendation-system/processed-data/movies_processed.csv'
@@ -65,11 +64,16 @@ def load_original_ratings_locally():
 
 def load_similarity_matrix_locally():
 	try:
-		similarity_matrix = pickle.load(open(similarity_matrix_path,'rb'))
+		# similarity_matrix = pickle.load(open(similarity_matrix_path,'rb'))
+		similarity_matrix = pd.read_csv("./processed-data/similarity_matrix.csv", compression="gzip")
+		print("similarity_matrix successfully loaded!")
 		return similarity_matrix
 	except:
 		print('Error occurred when attempting to load similarity_matrix!')
 		
+def load_movie_row_from_similarity_matrix_from_db():
+	print('Hello World from load_movie_row_from_similarity_matrix_from_db')
+	# row = b.similarity_matrix.find({})	
 
 
 def get_movies_from_db():
