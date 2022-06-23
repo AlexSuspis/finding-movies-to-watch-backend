@@ -44,6 +44,9 @@ def preprocess_movies():
 
 	movies_df.drop_duplicates(subset='title', inplace=True)
 
+	movies_df['movieId'] = range(0, len(movies_df))
+	# print(movies_df)
+
 	#save locally and to database		
 	saver.save_preprocessed_movies_locally(movies_df)
 	saver.post_preprocessed_movies_to_db(movies_df)
@@ -69,9 +72,10 @@ def compute_similarity_matrix():
 	similarity_matrix = cosine_similarity(tfidf_matrix, tfidf_matrix)
 	movieIds = movies_df['movieId'].values
 	sim_mat_df = pd.DataFrame(data=similarity_matrix, columns=movieIds, index=movieIds)
+	print(sim_mat_df)
 
 	# saver.save_similarity_matrix_locally(sim_mat_df)
-	saver.save_similarity_matrix_to_db(sim_mat_df)
+	# saver.save_similarity_matrix_to_db(sim_mat_df)
 	return
 
 def explore_datasets():
@@ -120,6 +124,6 @@ def explore_datasets():
 	print(merged_df.shape)
 
 
-# preprocess_movies()
+preprocess_movies()
 # explore_datasets()
-compute_similarity_matrix()
+# compute_similarity_matrix()
