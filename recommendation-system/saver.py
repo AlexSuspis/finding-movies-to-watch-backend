@@ -46,31 +46,16 @@ def save_similarity_matrix_to_db(similarity_matrix):
 	columns = similarity_matrix.columns[1:].map(str)
 	# print(columns)
 
-
-	sparse_matrix = csr_matrix(similarity_matrix)
-	print("sparse_matrix")
-	print(sparse_matrix)
-	print("")
-
-	data_ser = similarity_matrix.apply(lambda row: dict(zip(columns, row.values[1:])), axis=1)
-	print("data_ser")
-	print(data_ser)
-	# print(data_ser.dtypes)
-	print("")
-
-	similarity_matrix = pd.DataFrame(data={'movieId': movieIds, 'similarity': data_ser.values})
-	print("similarity_matrix")
-	print(similarity_matrix)
-	print("")
-
-	# try:
-	# 	db.similarity_matrix.delete_many({})
-	# 	db.similarity_matrix.insert_many(similarity_matrix.to_dict('records'))
-	# 	print('similarity_matrix successfully saved in db')
-	# except Exception as e:
-	# 	print('Something went wrong while attempting to save similarity_matrix')
-	# 	print(e)
-	# pass
+def save_sparse_similarity_matrix_to_db(sparse_similarity_matrix):
+	try:
+		db.similarity_matrix.delete_many({})
+		db.similarity_matrix.insert_many(sparse_similarity_matrix.to_dict('records'))
+		print('similarity_matrix successfully saved in db')
+	except Exception as e:
+		print('Something went wrong while attempting to save similarity_matrix')
+		print(e)
+	pass
+	
 
 def save_similarity_matrix_locally(similarity_matrix):
 	try:
