@@ -5,13 +5,14 @@ from sklearn.metrics.pairwise import linear_kernel, cosine_similarity
 import numpy as np
 import pandas as pd
 from scipy.sparse import csr_matrix
-import json
+import pickle
 
 
 def preprocess_movies():
 
 	movies_df = loader.load_original_movies_locally()
 	print(movies_df.columns)
+	print(len(movies_df))
 
 	#split genres into a list
 	movies_df['genres'] =  movies_df['genres'].apply(lambda x: x.replace("|", " "))
@@ -45,9 +46,11 @@ def preprocess_movies():
 	# print(movies_df['genres'])
 
 	movies_df.drop_duplicates(subset='title', inplace=True)
+	print(len(movies_df))
 
 	movies_df['movieId'] = range(0, len(movies_df))
-	# print(movies_df)
+	# print("No. movies in dataset: ", len(movies_df))
+	# print(movies_df.tail(20))
 
 	#save locally and to database		
 	saver.save_preprocessed_movies_locally(movies_df)
@@ -88,10 +91,11 @@ def compute_similarity_matrix():
 	sparse_similarity_matrix['movieId'] = similarity_matrix['movieId']
 	# result = json.dumps(recommended_movieIds.tolist())
 	# sparse_similarity_matrix['similarity_row'] = similarity_matrix.apply(lambda row: json.dumps(dict(csr_matrix(row).todok().items())), axis=1)
-	sparse_similarity_matrix['similarity_row'] = similarity_matrix.apply(lambda row: str(csr_matrix(row)), axis=1)
+	sparse_similarity_matrix['similarity_row'] = similarity_matrix.apply(lambda row: pickle.dumps(csr_matrix(row)), axis=1)
 	print(sparse_similarity_matrix)
 	print(sparse_similarity_matrix.dtypes)
 	print()
+
 
 	# saver.save_sparse_similarity_matrix_locally(sparse_similarity_matrix)
 	saver.save_sparse_similarity_matrix_to_db(sparse_similarity_matrix)
@@ -143,6 +147,6 @@ def explore_datasets():
 	print(merged_df.shape)
 
 
-# preprocess_movies()
+preprocess_movies()
 # explore_datasets()
-compute_similarity_matrix()
+# compute_similarity_matrix()

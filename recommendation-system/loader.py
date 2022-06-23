@@ -9,7 +9,7 @@ client = pymongo.MongoClient(uri)
 db = client['finding-movies-to-watch']
 
 
-serverRequest = False
+serverRequest = True
 if(serverRequest):
 	filename = './recommendation-system/input/small_dataset/movies.csv'
 else:	
@@ -30,8 +30,6 @@ def load_ratings_locally():
 	return ratings_df
 
 
-# serverRequest = True
-serverRequest = False
 if(serverRequest == True):
 	original_movies_path = './recommendation-system/input/small_dataset/movies.csv'
 	processed_movies_path = './recommendation-system/processed-data/movies_processed.csv'
@@ -71,10 +69,20 @@ def load_similarity_matrix_locally():
 	except:
 		print('Error occurred when attempting to load similarity_matrix!')
 		
-def load_movie_row_from_similarity_matrix_from_db():
-	print('Hello World from load_movie_row_from_similarity_matrix_from_db')
-	# row = b.similarity_matrix.find({})	
+def load_movie_similarity_row_from_db(movieId):
+	# print('Hello World from load_movie_row_from_similarity_matrix_from_db')
+	query_result = db.similarity_matrix.find_one({'movieId': movieId})	
+	pickled_row = query_result['similarity_row']
+	sparse_similarity_row = pickle.loads(pickled_row)
+	row = sparse_similarity_row.toarray()[0]
+	# print(row)	
+	movieIds = range(len(row))
+	# print(movieIds)
 
+	similarity_row = pd.Series(data=row, index=range(len(row)))
+	# print(similarity_row)
+
+	return similarity_row
 
 def get_movies_from_db():
 	movies = db.original_movies.find()

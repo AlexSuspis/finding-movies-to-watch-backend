@@ -26,11 +26,12 @@ def post_preprocessed_movies_to_db(movies_df):
 	# print('all movie records in movie collection deleted')
 
 	print("Hello from saver.py, working db upload")
-	print(movies_df)
+	print(movies_df.head(20))
+	print(movies_df.tail(20))
 	# print(movies_df.dtypes)
 
-	# db.movies.insert_many(movies_df.to_dict('records'))
-	# print("inserted movies from dataset into movie collection")
+	db.movies.insert_many(movies_df.to_dict('records'))
+	print("inserted movies from dataset into movie collection")
 	return
 
 def save_similarity_matrix_to_db(similarity_matrix):
