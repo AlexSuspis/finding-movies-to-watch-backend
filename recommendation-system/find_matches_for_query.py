@@ -7,8 +7,8 @@ curr_dir = os.path.abspath(__file__ + "/..")
 import json
 # from curr_dir import utils
 # from curr_dir import loader
-import curr_dir.utils
-import curr_dir.loader
+from . import utils
+from . import loader
 
 
 def find_movieIds_from_closest_titles_to(query, n):
