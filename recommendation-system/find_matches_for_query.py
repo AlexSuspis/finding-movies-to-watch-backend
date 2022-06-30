@@ -1,10 +1,13 @@
-import os
-curr_dir = os.path.abspath(".")
-# import sys
-# sys.path.append('/app/recommendation-system/')
+# import os
+# curr_dir = os.path.abspath(".")
+import sys
+sys.path.append('/app/recommendation-system/')
+
 import json
-from curr_dir import utils
-from curr_dir import loader
+# from curr_dir import utils
+# from curr_dir import loader
+import utils
+import loader
 
 
 def find_movieIds_from_closest_titles_to(query, n):
@@ -46,3 +49,4 @@ def find_movieIds_from_closest_titles_to(query, n):
 query = str(sys.argv[1])
 n = int(sys.argv[2])
 find_movieIds_from_closest_titles_to(query, n)
+
