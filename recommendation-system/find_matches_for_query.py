@@ -2,45 +2,45 @@ import loader
 import utils
 import json
 import sys
+sys.path.append('/app/recommendation-system/')
+
 
 def find_movieIds_from_closest_titles_to(query, n):
-	movies_df = loader.load_processed_movies_locally()
-	# movies_df = loader.get_processed_movies_from_db()
-	# print(movies_df.head())
-	# print(movies_df['title'])
-	# print(movies_df['clean_title'])
+    movies_df = loader.load_processed_movies_locally()
+    # movies_df = loader.get_processed_movies_from_db()
+    # print(movies_df.head())
+    # print(movies_df['title'])
+    # print(movies_df['clean_title'])
 
-	clean_query = utils.clean_string(query)
-	# # print(clean_query)
+    clean_query = utils.clean_string(query)
+    # # print(clean_query)
 
-	movies_df['similarity_to_query'] = movies_df['clean_title'].apply(
-			lambda clean_title: utils.get_string_similarity(clean_title, clean_query))
-	# print(movies_df['similarity_to_query'])
+    movies_df['similarity_to_query'] = movies_df['clean_title'].apply(
+        lambda clean_title: utils.get_string_similarity(clean_title, clean_query))
+    # print(movies_df['similarity_to_query'])
 
-	#sort
-	movies_df.sort_values(by='similarity_to_query', ascending=False, axis=0, inplace=True)
-	# print(movies_df)
+    # sort
+    movies_df.sort_values(by='similarity_to_query',
+                          ascending=False, axis=0, inplace=True)
+    # print(movies_df)
 
+    # no matches found
+    if movies_df['similarity_to_query'].iloc[0] < 0.7:
+        print([])
+    else:
+        # Get top n values
+        top_movieIds = movies_df['movieId'][:n].values
+        # print(movies_df['similarity_to_query'][:n])
 
-	#no matches found
-	if movies_df['similarity_to_query'].iloc[0] < 0.7:
-		print([])
-	else:
-		#Get top n values
-		top_movieIds = movies_df['movieId'][:n].values
-		# print(movies_df['similarity_to_query'][:n])
+        # utils.get_movie_titles_from_ids(top_movieIds)
+        # results = top_movieIds.tolist()
+        # print(results)
 
-		# utils.get_movie_titles_from_ids(top_movieIds)
-		# results = top_movieIds.tolist()
-		# print(results)
-
-		print(json.dumps(top_movieIds.tolist()))
-
+        print(json.dumps(top_movieIds.tolist()))
 
 
 # result = find_movieIds_from_closest_titles_to('iron man', 5)
 # print(result)
-
 query = str(sys.argv[1])
 n = int(sys.argv[2])
 find_movieIds_from_closest_titles_to(query, n)
