@@ -1,7 +1,7 @@
 # import os
 # curr_dir = os.path.abspath(".")
 import sys
-sys.path.append('/app/recommendation-system/')
+sys.path.append('/app/recommendation-system')
 
 # from curr_dir import utils
 # from curr_dir import loader
