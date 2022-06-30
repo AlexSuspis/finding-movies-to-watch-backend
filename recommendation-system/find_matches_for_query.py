@@ -1,5 +1,5 @@
-import loader
-import utils
+from . import loader
+from . import utils
 import json
 import sys
 sys.path.append('/app/recommendation-system/')

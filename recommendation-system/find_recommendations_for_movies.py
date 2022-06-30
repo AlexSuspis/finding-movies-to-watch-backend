@@ -1,9 +1,9 @@
 from scipy.sparse import csr_matrix
 import pickle
-import utils
+from . import utils
 import numpy as np
 import json
-import loader
+from . import loader
 import sys
 sys.path.append('/app/recommendation-system/')
 
