@@ -1,7 +1,9 @@
-import sys
-sys.path.append('/app/recommendation-system/')
-from . import utils
-from . import loader
+# import sys
+# sys.path.append('/app/recommendation-system/')
+import os
+curr_dir = os.path.abspath(".")
+from curr_dir import utils
+from curr_dir import loader
 from scipy.sparse import csr_matrix
 import numpy as np
 import json

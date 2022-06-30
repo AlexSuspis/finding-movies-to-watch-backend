@@ -1,10 +1,10 @@
-# import os
-# curr_dir = os.path.abspath(".")
-import sys
-sys.path.append('/app/recommendation-system/')
+import os
+curr_dir = os.path.abspath(".")
+# import sys
+# sys.path.append('/app/recommendation-system/')
 import json
-from . import utils
-from . import loader
+from curr_dir import utils
+from curr_dir import loader
 
 
 def find_movieIds_from_closest_titles_to(query, n):
