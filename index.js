@@ -35,7 +35,7 @@ const get_movieIds_from_query = (query, n) => {
         try {
             const python = spawn(
                 "python",
-                ["recommendation-system/find_matches_for_query.py", query, n]
+                ["/app/recommendation-system/find_matches_for_query.py", query, n]
             );
             python.stdout.on("data", (data) => {
                 movieIds = JSON.parse(data.toString())
