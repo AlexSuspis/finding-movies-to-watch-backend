@@ -1,7 +1,7 @@
 # try: 
     # print("Hello World!")
 import os
-curr_dir = os.path.abspath(__file__ + "/..")
+curr_dir = os.path.abspath(__file__ + "/.." + "/")
 print(curr_dir)
     # import sys
     # sys.path.append('/app/recommendation-system')
