@@ -7,22 +7,22 @@ curr_dir = os.path.abspath(__file__ + "/..")
 import json
 # from curr_dir import utils
 # from curr_dir import loader
-from . import utils
-from . import loader
+from .utils import clean_string, get_string_similarity
+from .loader import get_processed_movies_from_db
 
 
 def find_movieIds_from_closest_titles_to(query, n):
     # movies_df = loader.load_processed_movies_locally()
-    movies_df = loader.get_processed_movies_from_db()
+    movies_df = get_processed_movies_from_db()
     # print(movies_df.head())
     # print(movies_df['title'])
     # print(movies_df['clean_title'])
 
-    clean_query = utils.clean_string(query)
+    clean_query = clean_string(query)
     # # print(clean_query)
 
     movies_df['similarity_to_query'] = movies_df['clean_title'].apply(
-        lambda clean_title: utils.get_string_similarity(clean_title, clean_query))
+        lambda clean_title: get_string_similarity(clean_title, clean_query))
     # print(movies_df['similarity_to_query'])
 
     # sort
