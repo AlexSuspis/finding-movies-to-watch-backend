@@ -1,11 +1,11 @@
-from scipy.sparse import csr_matrix
-import pickle
-from . import utils
-import numpy as np
-import json
-from . import loader
 import sys
 sys.path.append('/app/recommendation-system/')
+from . import utils
+from . import loader
+from scipy.sparse import csr_matrix
+import numpy as np
+import json
+import pickle
 
 
 def predict_similarity_matrix(matched_movieIds):
