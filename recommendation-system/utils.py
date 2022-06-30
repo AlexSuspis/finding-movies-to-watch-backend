@@ -2,7 +2,7 @@ import re
 import string
 import random
 from difflib import SequenceMatcher
-from fuzzywuzzy import fuzz
+# from fuzzywuzzy import fuzz
 import loader
 from datetime import datetime
 
