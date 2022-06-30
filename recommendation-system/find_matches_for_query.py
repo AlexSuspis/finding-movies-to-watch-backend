@@ -1,5 +1,5 @@
 try: 
-    print("Hello World!")
+    # print("Hello World!")
     import os
     curr_dir = os.path.abspath(__file__ + "/..")
     # print(curr_dir)
