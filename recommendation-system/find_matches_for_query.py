@@ -54,5 +54,5 @@ try:
     n = int(sys.argv[2])
     find_movieIds_from_closest_titles_to(query, n)
 
-except e as Exception:
+except Exception as e:
     print(e, flush=True)
