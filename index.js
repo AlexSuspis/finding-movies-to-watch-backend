@@ -68,6 +68,7 @@ app.get("/matches/:query", async (req, res) => {
     try {
         var movieIds_matching_query = await get_movieIds_from_query(query, 3)
         console.log(movieIds_matching_query)
+        console.log(typeof movieIds_matching_query)
 
         if (Object.keys(movieIds_matching_query).length == 0) {
             console.log("no matches for query!")
