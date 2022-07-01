@@ -34,7 +34,7 @@ try:
 
         # no matches found
         if movies_df['similarity_to_query'].iloc[0] < 0.7:
-            print([])
+            print([], flush=True)
         else:
             # Get top n values
             top_movieIds = movies_df['movieId'][:n].values
@@ -44,7 +44,7 @@ try:
             # results = top_movieIds.tolist()
             # print(results)
 
-            print(json.dumps(top_movieIds.tolist()))
+            print(json.dumps(top_movieIds.tolist()), flush=True)
 
 
     # result = find_movieIds_from_closest_titles_to('iron man', 5)
@@ -54,4 +54,4 @@ try:
     find_movieIds_from_closest_titles_to(query, n)
 
 except e as Exception:
-    print(e)
+    print(e, flush=True)
