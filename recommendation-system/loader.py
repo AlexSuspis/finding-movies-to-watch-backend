@@ -49,7 +49,6 @@ else:
     final_df_path = './final_df'
     similarity_matrix_path = './processed-data/similarity_matrix.dat'
 
-
 def load_processed_movies_locally():
     movies_df = pd.read_csv(processed_movies_path)
     return movies_df
@@ -92,14 +91,19 @@ def load_movie_similarity_row_from_db(movieId):
 
     return similarity_row
 
+def load_processed_movies_from_db():
+    movies_df = db.movies.find()
+    movies_df = pd.DataFrame(movies).drop(columns=['_id'])
+    return movies_df
+    
 
-def get_movies_from_db():
+def get_original_movies_from_db():
     movies = db.original_movies.find()
     movies_df = pd.DataFrame(movies).drop(columns=['_id'])
     return movies_df
 
 
-def get_ratings_from_db():
+def get_original_ratings_from_db():
     ratings = db.original_ratings.find()
     ratings_df = pd.DataFrame(ratings).drop(columns=['_id'])
     return ratings_df
