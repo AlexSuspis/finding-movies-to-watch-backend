@@ -92,7 +92,7 @@ def load_movie_similarity_row_from_db(movieId):
     return similarity_row
 
 def load_processed_movies_from_db():
-    movies_df = db.movies.find()
+    movies_df = db.movies.find({})
     movies_df = pd.DataFrame(movies).drop(columns=['_id'])
     return movies_df
     
