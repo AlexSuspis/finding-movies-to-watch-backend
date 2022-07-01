@@ -35,7 +35,7 @@ try:
 
         # no matches found
         if movies_df['similarity_to_query'].iloc[0] < 0.7:
-            print([])
+            print(json.dumps([]))
         else:
             # Get top n values
             top_movieIds = movies_df['movieId'][:n].values
