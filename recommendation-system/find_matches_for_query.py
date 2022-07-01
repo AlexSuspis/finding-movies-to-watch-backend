@@ -2,7 +2,7 @@ try:
     # import os
     # curr_dir = os.path.abspath(__file__ + "/..")
     # # print(curr_dir)
-    # import sys
+    import sys
     # sys.path.append('/app/recommendation-system')
 
     # import json
