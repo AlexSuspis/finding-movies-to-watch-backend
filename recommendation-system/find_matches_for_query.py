@@ -1,7 +1,7 @@
 try: 
     # print("Hello World!")
     import sys
-    print(syspath)
+    print(sys.path)
     # import os
     # curr_dir = os.path.abspath(__file__ + "/..")
     # # print(curr_dir)
