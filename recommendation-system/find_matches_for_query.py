@@ -9,8 +9,8 @@ try:
     import json
     # from curr_dir import utils
     # from curr_dir import loader
-    from app.recommendation-system.utils import clean_string, get_string_similarity
-    from app.recommendation-system.loader import get_processed_movies_from_db
+    from recommendation-system.utils import clean_string, get_string_similarity
+    from recommendation-system.loader import get_processed_movies_from_db
 
 
     def find_movieIds_from_closest_titles_to(query, n):
