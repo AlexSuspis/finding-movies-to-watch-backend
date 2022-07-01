@@ -48,6 +48,7 @@ const get_movieIds_from_query = (query, n) => {
         }
         catch (err) {
             console.log("error!: ", err)
+            reject(err)
         }
     });
 };
