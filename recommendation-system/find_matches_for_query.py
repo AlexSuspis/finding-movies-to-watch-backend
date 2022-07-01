@@ -5,7 +5,7 @@ try:
     import sys
     # sys.path.append('/app/recommendation-system')
 
-    # import json
+    import json
     # from curr_dir import utils
     # from curr_dir import loader
     # from utils import clean_string, get_string_similarity
