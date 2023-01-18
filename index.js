@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const Movie = require('./models/movie')
 const mongoose = require('mongoose')
+const axios = require('axios')
 
 const spawn = require("child_process").spawn;
 
