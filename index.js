@@ -29,11 +29,6 @@ app.get('/', (req, res) => {
     res.send('Welcome to the home page!');
 })
 
-const get_movieIds_from_query = (query, n) => {
-
-
-
-};
 const render_movieIds_into_movies = async (movieIds) => {
     let movies = []
     for (let movieId of movieIds) {
@@ -61,8 +56,8 @@ app.get("/matches/:query", async (req, res) => {
 
     const getMatchedMovies = async function () {
         try {
-            const response = await axios.get(`http://0.0.0.0:3000/matches/${query}/3`)
-            // console.log(response)
+            // const response = await axios.get(`http://finding-movies-to-watch_recommendation-system_1:3000/matches/${query}/3`)            // console.log(response)
+            const response = await axios.get(`http://recommendation-system:3000/matches/${query}/3`)            // console.log(response)
             var matched_movieIds = response.data
 
             console.log(matched_movieIds)
@@ -82,7 +77,7 @@ app.get("/matches/:query", async (req, res) => {
         }
         catch (err) {
             console.log(err)
-            res.send({ "errorMessage": "Something went wrong!" })
+            res.send({ "error!": err })
         }
     }
     await getMatchedMovies()
