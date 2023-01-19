@@ -61,7 +61,7 @@ app.get("/matches/:query", async (req, res) => {
 
     const getMatchedMovies = async function () {
         try {
-            const response = await axios.get(`http://localhost:3000/matches/${query}/3`)
+            const response = await axios.get(`http://0.0.0.0:3000/matches/${query}/3`)
             // console.log(response)
             var matched_movieIds = response.data
 
