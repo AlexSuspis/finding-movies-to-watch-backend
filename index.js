@@ -30,29 +30,20 @@ app.get('/', (req, res) => {
 })
 
 const get_movieIds_from_query = (query, n) => {
-    //promise code inspired by:
-    //https://www.geeksforgeeks.org/how-to-communicate-json-data-between-python-and-node-js/
-    return new Promise((resolve, reject) => {
-        try {
-            const python = spawn(
-                "python",
-                ["/app/recommendation-system/find_matches_for_query.py", query, n]
-            );
-            python.stdout.on("data", (data) => {
-                movieIds = JSON.parse(data.toString())
-                resolve(movieIds)
-                // resolve(data.toString());
-            });
-            python.stderr.on("data", (data) => {
-                reject(data.toString());
-            });
-        }
-        catch (err) {
-            console.log("error!: ", err)
-            reject(err)
-        }
-    });
+
+
+
 };
+const render_movieIds_into_movies = async (movieIds) => {
+    let movies = []
+    for (let movieId of movieIds) {
+        let movie = await render_movie_from_id(movieId)
+        console.log(movie)
+        movies.push(movie)
+    }
+    console.log(movies)
+    return movies
+}
 
 const render_movie_from_id = async (movieId) => {
     console.log("movie received!: ", movieId)
@@ -66,31 +57,37 @@ const render_movie_from_id = async (movieId) => {
 app.get("/matches/:query", async (req, res) => {
     const { query } = req.params;
     console.log(`query is: ${query}`)
-    try {
-        var movieIds_matching_query = await get_movieIds_from_query(query, 3)
-        console.log(movieIds_matching_query)
-        console.log(typeof movieIds_matching_query)
 
-        if (Object.keys(movieIds_matching_query).length == 0) {
-            console.log("no matches for query!")
-            res.status(404)
-            res.send({ "errorMessage": "No matches found for query!" })
+
+    const getMovies = async function () {
+        try {
+            const response = await axios.get(`http://localhost:3000/matches/${query}/3`)
+            // console.log(response)
+            var matched_movieIds = response.data
+
+            console.log(matched_movieIds)
+
+            //If no matched movies
+            if (Object.keys(matched_movieIds).length == 0) {
+                console.log("no matches for query!")
+                res.status(404)
+                res.send({ "errorMessage": "No matches found for query!" })
+                return
+            }
+
+            //render movieIds into movie objects
+            let movies = await render_movieIds_into_movies(matched_movieIds)
+            res.send(JSON.stringify(movies))
             return
         }
-        var movies = [];
-        for (let movieId of movieIds_matching_query) {
-            let movie = await render_movie_from_id(movieId)
-            console.log(movie)
-            movies.push(movie)
+        catch (err) {
+            console.log(err)
+            res.send({ "errorMessage": "Something went wrong!" })
         }
-        console.log(movies)
-        res.send(JSON.stringify(movies))
+    }
+    await getMovies()
 
-    } catch (err) {
-        console.log('error!: ', err)
-        res.status(404)
-        res.send({ "errorMessage": "Something went wrong!" })
-    };
+    return
 });
 const get_recommended_movieIds = (movieIds) => {
     //promise code inspired by:
