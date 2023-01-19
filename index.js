@@ -59,7 +59,7 @@ app.get("/matches/:query", async (req, res) => {
     console.log(`query is: ${query}`)
 
 
-    const getMovies = async function () {
+    const getMatchedMovies = async function () {
         try {
             const response = await axios.get(`http://localhost:3000/matches/${query}/3`)
             // console.log(response)
@@ -85,7 +85,7 @@ app.get("/matches/:query", async (req, res) => {
             res.send({ "errorMessage": "Something went wrong!" })
         }
     }
-    await getMovies()
+    await getMatchedMovies()
 
     return
 });
@@ -110,32 +110,39 @@ const get_recommended_movieIds = (movieIds) => {
             console.log("error!: ", err)
         }
     });
+
+
 };
 
 //Input: movieIds
 //Output: movieIds most similar to input movieId, not including any of the input movieIds
 app.get('/recommendations/:movieIds', async (req, res) => {
-    let { movieIds } = req.params
-    try {
-        var recommended_movieIds = [];
-        recommended_movieIds = await get_recommended_movieIds(movieIds)
-        // console.log(recommended_movieIds)
-        // console.log(typeof (recommended_movieIds))
 
-        var movies = [];
-        for (let movieId of recommended_movieIds) {
-            let movie = await render_movie_from_id(movieId)
-            // console.log(movie)
-            movies.push(movie)
+    const { movieIds } = req.params;
+    console.log(`movieIDs: ${movieIds}`)
+
+    const getRecommendedMovies = async function () {
+        try {
+            const response = await axios.get(`http://localhost:3000/recommendations/${movieIds}`)
+            // console.log(response)
+            var recommended_movieIds = response.data
+
+            console.log(recommended_movieIds)
+
+            //render movieIds into movie objects
+            let movies = await render_movieIds_into_movies(recommended_movieIds)
+            res.send(JSON.stringify(movies))
+            return
         }
-        console.log(movies)
-        res.send(JSON.stringify(movies))
-
-    } catch (err) {
-        console.log('error in GET /recommendations/:movieIds endpoint: ', err)
-        res.status(404)
-        res.send({ "errorMessage": "Something went wrong!" })
+        catch (err) {
+            console.log(err)
+            res.send({ "errorMessage": "Something went wrong!" })
+            return
+        }
     }
+    await getRecommendedMovies()
+
+    return
 })
 
 
