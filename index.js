@@ -151,5 +151,4 @@ app.listen(port, () => {
 module.exports = {
     app,
     get_recommended_movieIds,
-    get_movieIds_from_query
 }
