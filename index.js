@@ -118,7 +118,7 @@ app.get('/recommendations/:movieIds', async (req, res) => {
 
     const getRecommendedMovies = async function () {
         try {
-            const response = await axios.get(`http://localhost:3000/recommendations/${movieIds}`)
+            const response = await axios.get(`http://recommendation-system:3000/recommendations/${movieIds}`)
             // console.log(response)
             var recommended_movieIds = response.data
 
